@@ -1,265 +1,265 @@
 [
   {
     "speaker": "Mia",
-    "text": "Welcome to our veggie shop, Max! Big smiles, big baskets!",
+    "text": "Welcome to our veggie shop, Max!",
     "topic": "WELCOME",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "And big questions. Do vegetables take credit cards?",
+    "text": "Do vegetables accept credit cards?",
     "topic": "WELCOME",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Only if you lettuce pay! Ha ha!",
+    "text": "Only if you lettuce pay!",
     "topic": "WELCOME",
     "joke": true
   },
   {
     "speaker": "Max",
-    "text": "That joke was so fresh, it still has roots.",
+    "text": "Ha! That joke still has roots.",
     "topic": "WELCOME",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "First, red tomatoes! Juicy, round, and delicious.",
+    "text": "These juicy red tomatoes are delicious.",
     "topic": "TOMATOES",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Are tomatoes vegetables, or sneaky little fruits?",
+    "text": "Wait, are tomatoes actually fruits?",
     "topic": "TOMATOES",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Botanically fruits, but in cooking we call them veggies.",
+    "text": "Botanically yes; cooks use them as vegetables.",
     "topic": "TOMATOES",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Aha! Double agents in the salad bowl!",
+    "text": "Double agents in the salad!",
     "topic": "TOMATOES",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Look at these orange carrots. They are crunchy root vegetables.",
+    "text": "Carrots are orange, crunchy roots.",
     "topic": "CARROTS",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Do carrots help rabbits see in the dark?",
+    "text": "Do carrots give rabbits night vision?",
     "topic": "CARROTS",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "They provide vitamin A helpers for healthy vision.",
+    "text": "Their vitamin A supports healthy eyesight.",
     "topic": "CARROTS",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Then why is that rabbit wearing sunglasses?",
+    "text": "Then why the bunny sunglasses?",
     "topic": "CARROTS",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Next, potatoes! We can bake, mash, or roast them.",
+    "text": "Here are potatoes: bake, mash, or roast!",
     "topic": "POTATOES",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "A potato told me it felt mashed today.",
+    "text": "My potato feels mashed today.",
     "topic": "POTATOES",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "That is a very starchy joke, Max.",
+    "text": "That is one starchy joke, Max!",
     "topic": "POTATOES",
     "joke": true
   },
   {
     "speaker": "Max",
-    "text": "Thank you. I practice every fry-day!",
+    "text": "I practise every fry-day!",
     "topic": "POTATOES",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Here are onions, with layers and a strong smell.",
+    "text": "Onions have layers and a strong smell.",
     "topic": "ONIONS",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "I chopped one, and my eyes started a swimming lesson!",
+    "text": "I chopped one. My eyes went swimming!",
     "topic": "ONIONS",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "And cucumbers are crisp and cool in salads.",
+    "text": "Cucumbers are crisp and cool.",
     "topic": "CUCUMBERS",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "I told a cucumber to chill. It was already cool!",
+    "text": "I told one to chill. Already cool!",
     "topic": "CUCUMBERS",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Now meet broccoli. Its green tops look like tiny trees.",
+    "text": "Broccoli looks like tiny green trees.",
     "topic": "BROCCOLI",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "A miniature forest! Where do the broccoli squirrels live?",
+    "text": "Where do the broccoli squirrels live?",
     "topic": "BROCCOLI",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Probably somewhere near our leafy green spinach.",
+    "text": "By our fresh, leafy green spinach!",
     "topic": "SPINACH",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Will spinach turn my shopping bags into dumbbells?",
+    "text": "Will spinach make me a superhero?",
     "topic": "SPINACH",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "It offers nutrients, but strong muscles still need practice.",
+    "text": "It has nutrients, but practise helps too.",
     "topic": "SPINACH",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Aw! I was hoping for instant superhero mode!",
+    "text": "Aw! No instant superhero powers?",
     "topic": "SPINACH",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "These shiny bell peppers come in many colors.",
+    "text": "Bell peppers come in bright colors.",
     "topic": "BELL PEPPERS",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Do they ring? Hello! Anybody bell pepper home?",
+    "text": "Do bell peppers actually ring? Hello?",
     "topic": "BELL PEPPERS",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "No ringing, but they are sweet and wonderfully crunchy.",
+    "text": "Nope! But they taste sweet and crunchy.",
     "topic": "BELL PEPPERS",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Fine! I will answer the door with a carrot.",
+    "text": "Fine! I will answer with a carrot!",
     "topic": "BELL PEPPERS",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Eggplants are purple, and also called aubergines.",
+    "text": "Eggplants are purple. Also called aubergines.",
     "topic": "EGGPLANTS",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Aubergine sounds like a vegetable who owns a castle!",
+    "text": "Aubergine sounds like a royal vegetable!",
     "topic": "EGGPLANTS",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "This huge orange pumpkin is perfect for tasty soup.",
+    "text": "This huge pumpkin makes tasty soup.",
     "topic": "PUMPKINS",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "And a spooky coach that turns into midnight snacks!",
+    "text": "Or a carriage for a hungry princess!",
     "topic": "PUMPKINS",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "We also have peas, corn, and snowy cauliflower.",
+    "text": "Look: peas, corn, and cauliflower!",
     "topic": "MORE VEGGIES",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Peas be kind! That cauliflower has a cloud haircut!",
+    "text": "Peas be kind! Cauliflower has cloud hair!",
     "topic": "MORE VEGGIES",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Review time! Tomato, carrot, potato, onion, cucumber.",
+    "text": "Review: tomato, carrot, potato, onion, cucumber.",
     "topic": "LET’S REVIEW",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Broccoli, spinach, bell pepper, eggplant, pumpkin!",
+    "text": "Broccoli, spinach, pepper, eggplant, pumpkin!",
     "topic": "LET’S REVIEW",
     "joke": false
   },
   {
     "speaker": "Mia",
-    "text": "And peas, corn, cauliflower. Which would you choose?",
+    "text": "And peas, corn, cauliflower. Your favorite?",
     "topic": "LET’S REVIEW",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "All of them! Can vegetables join my comedy club?",
+    "text": "All of them! Can veggies join my comedy club?",
     "topic": "GOODBYE",
     "joke": true
   },
   {
     "speaker": "Mia",
-    "text": "Of course! Just keep the jokes extra fresh.",
+    "text": "Yes, but keep the jokes fresh!",
     "topic": "GOODBYE",
     "joke": true
   },
   {
     "speaker": "Max",
-    "text": "Thanks for shopping, friends! Stay crunchy, stay smiling!",
+    "text": "Thanks for shopping! Stay crunchy and smiling!",
     "topic": "GOODBYE",
     "joke": false
   },
   {
     "speaker": "Mia",
-    "text": "See you next time at the veggie shop. Bye!",
+    "text": "See you next time! Bye!",
     "topic": "GOODBYE",
     "joke": false
   },
   {
     "speaker": "Max",
-    "text": "Bye! Oh, and lettuce go home!",
+    "text": "Bye! And lettuce go home!",
     "topic": "GOODBYE",
     "joke": true
   }

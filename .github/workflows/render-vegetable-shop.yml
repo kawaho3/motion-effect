@@ -1,5 +1,8 @@
 name: Vegetable Shop - neural audio and video
 on:
+  # A dedicated branch enables one deliberate audio test without auto-rendering on main.
+  push:
+    branches: [render-audio]
   workflow_dispatch:
     inputs:
       output:
@@ -50,7 +53,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: vegetable-shop-${{ inputs.output }}-${{ github.run_number }}
+          name: vegetable-shop-${{ inputs.output || 'audio' }}-${{ github.run_number }}
           path: episodes/vegetable_shop/output/
           if-no-files-found: warn
           retention-days: 7

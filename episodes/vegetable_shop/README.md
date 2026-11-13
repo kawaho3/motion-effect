@@ -40,7 +40,7 @@ Also provide `rig.json`, e.g.:
 
 ## GitHub Actions usage
 
-Use **Actions → Vegetable Shop - neural audio and video → Run workflow → audio** to generate a high-quality voice draft; download the audio and SRT from the workflow's Artifacts section. Select `video` only after all four art files are added and calibrated. **No automatic heavy render runs on push**, respecting usage limits. GitHub-hosted runners may still consume GitHub Actions minutes depending on repository/plan settings.
+Use **Actions → Vegetable Shop - neural audio and video → Run workflow → audio** to generate a high-quality voice draft; download the audio and SRT from the workflow's Artifacts section. Select `video` only after all four art files are added and calibrated. **No automatic heavy render runs on the main branch**, respecting usage limits. A dedicated `render-audio` branch can trigger a one-off neural-audio test upon push. GitHub-hosted runners may still consume GitHub Actions minutes depending on repository/plan settings.
 
 ## Limitations
 
