@@ -1,0 +1,84 @@
+{
+  "files": [
+    {
+      "filename": "Character_Transparent_Silent.webm",
+      "bytes": 41829950,
+      "duration_seconds": 19.4,
+      "video_codec": "vp9",
+      "width": 576,
+      "height": 1024,
+      "frame_rate": "25/1",
+      "pixel_format": "yuv420p",
+      "alpha_tag": "1",
+      "audio_streams": 0,
+      "alpha_samples": [
+        {
+          "time": 0.0,
+          "minimum": 0,
+          "maximum": 255,
+          "transparent_fraction": 0.87754,
+          "opaque_fraction": 0.12246
+        },
+        {
+          "time": 9.7,
+          "minimum": 0,
+          "maximum": 255,
+          "transparent_fraction": 0.810106,
+          "opaque_fraction": 0.189894
+        },
+        {
+          "time": 19.32,
+          "minimum": 0,
+          "maximum": 255,
+          "transparent_fraction": 0.76896,
+          "opaque_fraction": 0.23104
+        }
+      ],
+      "verified_real_alpha_on_sampled_frames": true,
+      "verified_silent": true,
+      "passes_sampled_export_checks": true,
+      "limitations": "Samples only three decoded frames; this does not prove absence of visual artifacts or preservation of original movement.",
+      "sha256": "da5f103ab524ab6e8886276d029fccb2c8826e776bc1e41c0a4bbed11d482474"
+    },
+    {
+      "filename": "Character_Transparent_Silent.mov",
+      "bytes": 125601383,
+      "duration_seconds": 19.4,
+      "video_codec": "prores",
+      "width": 576,
+      "height": 1024,
+      "frame_rate": "25/1",
+      "pixel_format": "yuva444p12le",
+      "alpha_tag": null,
+      "audio_streams": 0,
+      "alpha_samples": [
+        {
+          "time": 0.0,
+          "minimum": 0,
+          "maximum": 255,
+          "transparent_fraction": 0.87754,
+          "opaque_fraction": 0.12246
+        },
+        {
+          "time": 9.7,
+          "minimum": 0,
+          "maximum": 255,
+          "transparent_fraction": 0.810106,
+          "opaque_fraction": 0.189894
+        },
+        {
+          "time": 19.32,
+          "minimum": 0,
+          "maximum": 255,
+          "transparent_fraction": 0.76896,
+          "opaque_fraction": 0.23104
+        }
+      ],
+      "verified_real_alpha_on_sampled_frames": true,
+      "verified_silent": true,
+      "passes_sampled_export_checks": true,
+      "limitations": "Samples only three decoded frames; this does not prove absence of visual artifacts or preservation of original movement.",
+      "sha256": "fd7402d13ba364fec0e3b40adfd53e68d59ff4d528691b784d62a812eef8187d"
+    }
+  ]
+}
