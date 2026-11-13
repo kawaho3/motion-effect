@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+# Model weights downloaded on demand
+models/
+*.onnx
+*.bin
+# Generated outputs / bulky working media
+work/neural_raw_*.wav
+work/still_*.jpg
+work/blink_*.jpg
+deliverables/*.mp4
+deliverables/*_Preview.jpg
+# OS and editors
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
