@@ -1,0 +1,138 @@
+MOTION EFFECT — EXACT VEGETABLE ADVENTURE SOUND PIPELINE
+=======================================================
+Guide updated 2026-11-14 | Repository: https://github.com/kawaho3/motion-effect
+
+PURPOSE
+-------
+This documents the higher-quality speech heard in the 120-second Vegetable
+Shop / Vegetable Adventure remake. It does NOT use eSpeak, online TTS credits,
+paid plugins, a hosted API, or copied voices. All inference runs locally after
+a one-time free model download. Developers can reproduce the same speech script,
+phoneme timings, mastering and subtitles from a fresh repository clone.
+
+1. EXACT GENERATOR / VOICES
+---------------------------
+Engine:             kokoro-onnx==0.6.1 (Python package)
+Inference runtime:  onnxruntime==1.31.1, CPUExecutionProvider
+Model weights:      models/kokoro-v1.0.fp16.onnx
+Voice bank:         models/voices-v1.0.bin
+Max voice:          am_puck
+Mia voice:          af_heart
+Language:           en-us
+Neural speed:       1.0 initially; auto-retry may use up to 1.16 if needed
+Sentence pause:     0.10 seconds
+Clause pause:       0.05 seconds
+Timing method:      Kokoro.create_timed(...) phoneme-duration output
+Narration script:   episodes/vegetable_shop/script.json (44 edited dialogue rows)
+
+IMPORTANT: Download and checksums live in setup_audio_models.py. Do not upload
+model weights into Git, substitute unofficial models, or disable verification.
+Current compatibility for Actions is Python 3.13. The original root
+requirements.txt pins numpy==2.5.4, which does not install on Python 3.11.
+Use the workflow's Python version or explicitly adjust dependencies after tests.
+
+2. LOCAL DEVELOPMENT — GENERATE AUDIO
+-------------------------------------
+  git clone https://github.com/kawaho3/motion-effect.git
+  cd motion-effect
+  python -m venv .venv
+  # Linux/macOS: source .venv/bin/activate
+  # Windows:     .venv\Scripts\activate
+  python -m pip install -r requirements.txt
+  python setup_audio_models.py
+  python episodes/vegetable_shop/build.py --check-script
+  python episodes/vegetable_shop/build.py --audio
+
+The first model setup requires Internet; synthesis, DSP, video compositing
+and encoding are local. Do not use pip install espeak as a fallback. If the
+model download fails, FIX THE ENVIRONMENT rather than silently degrading voice.
+
+3. FILES PRODUCED
+-----------------
+episodes/vegetable_shop/output/vegetable_shop.wav
+  120.000-second 48,000 Hz / 2-channel / PCM_24 MASTER
+  48,000 samples per second, 24-bit audio, stereo
+
+episodes/vegetable_shop/output/timeline.json
+  One row per line, with speaker, original dialogue, exact start/end seconds,
+  phoneme string and each phoneme's timestamp, used for true speech-timed lips.
+
+episodes/vegetable_shop/output/vegetable_shop.srt
+  44 subtitle cues, including speaker labels and dialogue text.
+
+episodes/vegetable_shop/output/audio_quality.json
+  Measured integrated loudness, peak, clip count, sample rate and duration.
+
+4. AUDIO DSP IMPLEMENTATION — improve_audio.py
+-----------------------------------------------
+- Each raw Kokoro clip is processed with polish_voice() from improve_audio.py.
+- Voice target before mastering: -19.0 LUFS.
+- Default high-pass: 75 Hz, second order; removes rumble/DC below speech.
+- Gentle low-mid EQ near 230 Hz (-1 dB) and presence near 2,800 Hz (+0.8 dB).
+- De-essing: adaptive band around 5,200 to 10,000 Hz, maximum ~2.7 dB cut.
+- Compression: 1.65:1 around -20 dB, 6 dB knee, max reduction ~4.5 dB.
+- Normalize loudness with pyloudnorm; protect oversampled true peak at -1.5 dBTP.
+- All lines resampled to 48 kHz before the master.
+- Slight stereo width: Max left (pan -0.035); Mia right (pan +0.035).
+- Speech clips inserted at original model-derived word/phoneme times with
+  natural line pauses. NO after-the-fact speedup or pitch-warp of WAV files.
+- Final output target: -16.5 LUFS stereo. Music is OFF by default so jokes
+  remain intelligible and clear.
+- The MP4 render encodes this WAV as AAC 224 kbps stereo (editor-compatible).
+
+IMPORTANT: 'Good sound' is partly subjective. This is a reproducible signal
+chain, not a promise of perfectly human delivery. Listen to the WAV fully
+for mispronunciations, syllable timing, robotic prosody or abrupt sentences.
+
+5. LAST VERIFIED GITHUB AUDIO RESULT (2026-11-13 / local 2026-11-14)
+------------------------------------------------------------------
+Kokoro Actions run: https://github.com/kawaho3/motion-effect/actions/runs/43499211402
+Audio quality report observed:
+  Duration:                 120.0 seconds
+  Output format:            48 kHz, stereo, PCM_24 WAV
+  Integrated loudness:     -16.56 LUFS (approximately)
+  True peak:               -1.50 dBTP (approximately)
+  Clipped samples:          0
+  Background music:         disabled
+  Timeline:                 44 voice lines with phoneme timing
+These values are evidence for *that run*, not fixed constants for every script.
+
+6. QA AND TROUBLESHOOTING
+-------------------------
+ffprobe -v error -show_entries format=duration:stream=codec_name,sample_rate,channels -of json episodes/vegetable_shop/output/vegetable_shop.wav
+ffprobe -v error -show_entries format=duration:stream=codec_name,codec_type,r_frame_rate -of json episodes/vegetable_shop/output/Vegetable_Adventure_2_Minutes.mp4
+
+Check in headphones at both quiet and normal volume:
+  [ ] Max/Mia have consistent distinct voices with natural pronunciation.
+  [ ] Dialogue is not metallic, distorted, clipped, harsh or covered by music.
+  [ ] No sentence cuts off early or overlaps unintentionally.
+  [ ] Timing JSON and subtitles match audible words.
+  [ ] Final AAC not too different from source WAV.
+  [ ] Human-reviewed impression at every joke and transition.
+
+If model not found: run setup_audio_models.py and check SHA256 outputs.
+If pip install fails on Python 3.11: use Python 3.13 as in Actions.
+If 120-second timing fails: shorten overlong lines in script.json or adjust
+  Kokoro speed in build.py, THEN REGENERATE TIMELINE; never fake the timings.
+If loudness drifts: inspect audio_quality.json and master() target settings.
+If robotic sound returns: check no alternate eSpeak/system TTS path was used.
+If an ffmpeg command adds audio from a second source accidentally: confirm
+  the final MP4 maps input 1 audio from vegetable_shop.wav only.
+
+7. REPRODUCE IN GITHUB ACTIONS (MANUAL; COST AWARE)
+--------------------------------------------------
+Go to Actions > Vegetable Adventure - 12 locations > Run workflow.
+The job downloads the verified free model and runs build.py --audio before
+rendering. Download output files from the workflow's Artifacts tab. No neural
+synthesis runs automatically for every code commit. GitHub-hosted Actions
+minutes are metered according to repository/plan settings; they are not the
+same thing as a free personal desktop rendering run. Do not describe hosted
+CPU compute as universally free.
+
+8. LICENSING / SHARING
+---------------------
+The voice bank and ONNX model are upstream downloads; check their current
+licenses before redistribution. Do not commit private recordings or weights.
+Keep model hashes, dependency versions, voice names and review notes for
+future developers. The current generated character dialogue is original,
+not an attempt to imitate a real person's identity.

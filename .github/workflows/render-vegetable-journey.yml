@@ -1,0 +1,59 @@
+name: Vegetable Adventure - 12 locations
+
+on:
+  workflow_dispatch:
+    inputs:
+      preview:
+        description: 'Short 20-second preview only? (still uses Kokoro TTS)'
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install FFmpeg and free local Kokoro dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt -r requirements-journey.txt
+      - name: Lightweight unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Download integrity-checked Kokoro model weights
+        run: python setup_audio_models.py
+      - name: Synthesize 120s neural dialogue with phoneme timeline
+        run: python episodes/vegetable_shop/build.py --audio
+      - name: Render vegetable journey
+        run: |
+          if [[ '${{ inputs.preview }}' == 'true' ]]; then
+            python episodes/vegetable_shop/journey.py --preview-seconds 20
+          else
+            python episodes/vegetable_shop/journey.py
+            python scripts/check_vegetable_journey.py episodes/vegetable_shop/output/Vegetable_Adventure_2_Minutes.mp4
+          fi
+      - name: Upload editable outputs (no Git binary bloat)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vegetable-adventure-${{ github.run_number }}
+          path: |
+            episodes/vegetable_shop/output/Vegetable_Adventure_2_Minutes.mp4
+            episodes/vegetable_shop/output/Vegetable_Adventure_Preview.mp4
+            episodes/vegetable_shop/output/Vegetable_Adventure_12_Places.jpg
+            episodes/vegetable_shop/output/vegetable_shop.wav
+            episodes/vegetable_shop/output/vegetable_shop.srt
+            episodes/vegetable_shop/output/timeline.json
+            episodes/vegetable_shop/output/audio_quality.json
+            episodes/vegetable_shop/output/journey_scenes.json
+          if-no-files-found: warn
+          retention-days: 7

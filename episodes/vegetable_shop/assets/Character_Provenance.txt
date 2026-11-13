@@ -1,0 +1,17 @@
+VEGETABLE ADVENTURE — CHARACTER ART ASSET PROVENANCE
+===================================================
+Max_Standing.png and Mia_Standing.png were cropped from an original AI-generated
+transparent watercolor character pair produced for this project, referring to
+the existing Max and Mia character design. Their alpha masks have been cleaned
+and independently verified as non-opaque. The sprites are NOT third-party
+stock photography or ripped copyrighted film frames.
+
+Market_No_People.jpg was edited procedurally from the original project-owned
+vegetable-shop Scene_Concept.jpg; it fills the old people regions by reusing
+neighboring produce/foliage areas. Some seams remain and need artist cleanup.
+
+Derived scenery in journey_backgrounds.py is generated from deterministic
+Pillow drawing code, with no hosted API or paid image model needed at runtime.
+All copyrighted third-party models, fonts, external samples and stock photos
+remain excluded from this directory. Review rights before redistributing
+model weights, reference videos or unrelated proprietary source media.

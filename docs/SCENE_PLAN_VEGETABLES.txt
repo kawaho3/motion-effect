@@ -1,0 +1,29 @@
+12-SCENE / 2-MINUTE VEGETABLE LEARNING ADVENTURE
+================================================
+The audio is the original approved 44-line Max/Mia Kokoro dialogue, preserving
+voice identity, phonemes, jokes, and existing subtitles. Different places are
+visited without inserting new spoken lines or ruining the synchronized sound.
+
+SECONDS   LOCATION                     COMMUNICATION / TEACHING
+0-10      Village vegetable shop       Welcome, pay/lettuce joke
+10-20     Tomato greenhouse            Tomato colors, botanical fruit joke
+20-30     Carrot country garden        Roots, vitamin A, bunny question
+30-40     Potato farm                  Mash, roast, fry-day joke
+40-50     Onion market lane            Layers, watery eyes
+50-60     Cucumber greenhouse          Chill/cool joke, broccoli transition
+60-70     Broccoli valley              Little trees and spinach conversation
+70-80     Spinach garden               Leafy greens, superhero joke, peppers
+80-90     Bell pepper nursery          Colorful peppers and eggplant transition
+90-100    Eggplant courtyard           Aubergine, pumpkins, review transition
+100-110   Pumpkin harvest farm         Vegetable-name recap
+110-120   Sunset harvest festival      Goodbyes and stay-crunchy joke
+
+Background begins changing on EXACT 10-second boundaries. Cross-dissolve
+lasts 0.26s. Recurring character designs/clothes remain consistent; they
+stand and communicate, mouth/eyes follow timed sound, and jokes receive very
+small body reactions.
+
+CAUTION: A dialogue topic may span a cut. The original speech was written
+for the first 2-minute cut and was not rewritten for twelve scene visits.
+If a rewritten story explicitly announces every location, re-synthesize
+speech with Kokoro and regenerate the matching timeline.json and subtitles.

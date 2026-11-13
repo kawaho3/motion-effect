@@ -1,0 +1,74 @@
+MOTION EFFECT — 2D EYES, LIPS, GAZE, REACTIONS, AND SCENE SYSTEM
+================================================================
+
+ENTRY POINT
+-----------
+  python episodes/vegetable_shop/journey.py --contact-sheet
+  python episodes/vegetable_shop/journey.py --preview-seconds 20
+  python episodes/vegetable_shop/journey.py
+
+PRECONDITIONS
+-------------
+- Generate timed Kokoro dialogue first: python episodes/vegetable_shop/build.py --audio
+- Install Python 3.13, FFmpeg, root requirements.txt and requirements-journey.txt.
+- Do not point journey.py at the old eSpeak demonstration.
+- Characters must have real alpha: assets/Max_Standing.png, assets/Mia_Standing.png.
+- Scene artwork can be regenerated without Internet using journey_backgrounds.py.
+
+FACE ANIMATION
+--------------
+- The source artwork is an RGBA cutout of two standing, smiling characters.
+- Original painted teeth, lips and skin are retained; expression variants
+  are generated using very small optical remapping of the facial texture.
+- Viseme groups: rest, closed (m/b/p), open (a/ah), wide (e/i), rounded (o/u),
+  soft consonant. Each phoneme timestamp comes from Kokoro timeline.json.
+- 3-frame pose changeover blends adjacent mouth states instead of frame snaps.
+- Eye gaze shifts 1–2 source pixels toward the other character when listening.
+- Short independent blinks have a sine-squared onset/exit (~0.17s) instead
+  of a sudden on/off swap. Blink strength is deliberately subdued to reduce
+  inpainting artifacts. Eye blinks remain preview quality pending art review.
+- Joke tags on the existing script trigger 1.5–2.8px of decaying body bounce
+  and two distinct head-to-body micro-motion rhythms. Both remain standing.
+- No robotic head spins, emoji mouth overlays, fake third characters or
+  uniform 12fps frame duplication.
+
+SCENERY / TIME
+--------------
+Total 120 seconds, 30 real frames/sec => 3,600 frames.
+Each background lasts exactly ten seconds, with a 0.26-second dissolve that
+starts AT 10, 20, 30, etc. Seconds. Scene changes are not tied to the speech
+line boundaries, ensuring an exact schedule despite dialogue variation.
+The same two cutout actors are composited over all twelve settings.
+
+00–10  Village vegetable shop      welcome / jokes
+10–20  Tomato greenhouse          tomatoes
+20–30  Carrot country garden       carrots
+30–40  Potato farm                 potatoes
+40–50  Onion market lane           onions
+50–60  Cucumber greenhouse         cucumbers
+60–70  Broccoli valley             broccoli
+70–80  Spinach garden              spinach
+80–90  Bell pepper nursery         peppers
+90–100 Eggplant courtyard          eggplants
+100–110 Pumpkin harvest farm       pumpkins / review
+110–120 Sunset harvest festival    recap / goodbye
+
+Each location uses a deterministic scene renderer with unique structures,
+produce and color palette; outdoor and greenhouse panels are deliberately
+storybook illustrations (not 12 AI-generated photoreal environments). Four
+market-type locations reuse the project's own watercolor scene texture with
+rearranged displays and lighting. Stock photos are not used.
+
+ARTIST QUALITY LIMITATIONS / NEXT STEP
+-------------------------------------
+The character eye/mouth edits are better registered than naive circles, but
+perfect lip motion requires a human-illustrated set of visemes for every face,
+with ears/hair/eyes/skin matching exactly pixel-for-pixel. For production,
+replace or enhance the preview sprite states with artist-made matching
+textures or mesh-rigged facial animation, and visually audit the full MP4.
+The vector/painted scenery also needs artistic polish for reference parity.
+No mathematical signal-quality test proves a frame looks like the reference.
+
+Run `python scripts/check_vegetable_journey.py <mp4>` to verify FPS, duration,
+AAC audio, subtitle presence and that 12 successive scene samples are distinct.
+See `docs/SOUND_GUIDE_KOKORO.txt` for full voice notes.

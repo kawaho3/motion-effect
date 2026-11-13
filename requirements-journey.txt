@@ -1,0 +1,5 @@
+# Additional dependencies for 12-scene render (root requirements.txt for Kokoro)
+Pillow>=11,<14
+numpy>=2.0,<3
+opencv-python-headless>=4.10,<5
+soundfile>=0.13,<1
