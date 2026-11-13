@@ -11,11 +11,11 @@ from PIL import Image,ImageDraw,ImageFont,ImageFilter
 
 ROOT=Path(__file__).resolve().parent;ASSET=ROOT/'assets';WORK=ROOT/'work';OUT=ROOT/'deliverables'
 W,H=1280,720;FPS=30;FRAMES=900
-BASE=Image.open(ASSET/'Garden_Base.png').convert('RGB')
-AH=Image.open(ASSET/'Garden_Ah_Blink.png').convert('RGB').resize(BASE.size)
-OH=Image.open(ASSET/'Garden_Oh.png').convert('RGB').resize(BASE.size)
+BASE=Image.open(ASSET/('Garden_Base.png' if (ASSET/'Garden_Base.png').exists() else 'Garden_Base.jpg')).convert('RGB')
+AH=Image.open(ASSET/('Garden_Ah_Blink.png' if (ASSET/'Garden_Ah_Blink.png').exists() else 'Garden_Ah_Blink.jpg')).convert('RGB').resize(BASE.size)
+OH=Image.open(ASSET/('Garden_Oh.png' if (ASSET/'Garden_Oh.png').exists() else 'Garden_Oh.jpg')).convert('RGB').resize(BASE.size)
 SW,SH=BASE.size;TL=json.loads((WORK/'timeline.json').read_text())
-FONT=str(ASSET/'DejaVuSans-Bold.ttf')
+FONT=str(ASSET/'DejaVuSans-Bold.ttf') if (ASSET/'DejaVuSans-Bold.ttf').exists() else 'DejaVuSans.ttf'
 MOUTH={'Max':(432,296,525,360),'Mia':(1219,312,1313,381)}
 EYES={'Max':[(387,202,478,272),(490,180,539,248)],
       'Mia':[(1205,201,1264,275),(1280,224,1375,300)]}
