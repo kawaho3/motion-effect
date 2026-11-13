@@ -42,3 +42,11 @@ A second, independent 120-second episode source and Kokoro-only audio pipeline a
 ## 2026-11-14: Successful neural voice and local two-minute render
 
 GitHub Actions [run 43499211402](https://github.com/kawaho3/motion-effect/actions/runs/43499211402) produced 120s neural speech with no clipping, 44 timed lines, and no music. Local image-compositing then produced a 120s 1280×720 30fps MP4; `scripts/check_episode.py` passed duration/FPS/audio checks. The derived JPEG expressions and rig are committed as **preview-grade** reference assets. They are not visually endorsed as exact likeness to the requested reference video. Full video GitHub Actions validation remains pending until the `render-video` job completes.
+## 2026-11-14: 12-location animated vegetable journey
+
+- [x] 12 distinct 10-second locations, revised transparent standing characters, 6 original-image viseme groups, 3-frame lip smoothing, short independent blinks and joke bobbing.
+- [x] Comprehensive Kokoro ONNX sound engineering, facial animation, and 12-scene plan guides in docs/*.txt.
+- [x] Local offline suite: 12 tests passed. A new full 120.000-second MP4 passed FFprobe/FFmpeg QA: 3,600 frames, 30 fps, 1280x720, AAC audio, subtitles, 12 distinct sampled scenes (11 adjacent comparisons).
+- [x] Committed code and generated art only; MP4 and WAV remain delivery artifacts, not Git blobs.
+- [ ] Facial patches and vector farm backgrounds still need human artistic approval for the YouTube-reference aesthetic. Audio quality should receive listening QA as well.
+- [ ] Confirm manual GitHub-hosted journey render result separately; local passing code does not guarantee hosted job success.

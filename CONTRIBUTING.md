@@ -38,3 +38,7 @@ Read [the complete handoff](docs/foreground/PROJECT_HANDOFF.md) and [the evidenc
 ## Vegetable Shop episode
 
 Start with [episodes/vegetable_shop/README.md](episodes/vegetable_shop/README.md). The image concept and script are checked in; high-quality aligned facial plates and rig calibration are still required. Do not publish the previous eSpeak render as the upgraded neural episode.
+
+## 12-scene vegetable adventure
+
+For new contributions, read `episodes/vegetable_shop/README.md` and `docs/SOUND_GUIDE_KOKORO.txt` before touching speech or timing, and `docs/ANIMATION_GUIDE_JOURNEY.txt` before editing face poses or scenery. Run `python -m unittest discover -s tests -v`; keep full Kokoro/video workflows manually triggered to manage credits. Technical QA passing does **not** establish exact likeness to the owner's reference.

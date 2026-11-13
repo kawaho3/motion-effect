@@ -30,3 +30,6 @@ The first manual-audio branch run failed at dependency installation: NumPy 2.5.4
 ## First neural render result (2026-11-14)
 
 The second neural-audio GitHub Actions workflow **succeeded** with exactly 120.0 seconds, -16.56 LUFS integrated loudness, -1.50 dBTP, zero clipped samples, no backing track, and phoneme timelines for all 44 shortened lines. The new local 1280×720 30fps video was rendered with scene-aligned **procedurally derived preview** mouth/blink JPEGs. `scripts/check_episode.py` confirmed 120.0s, 30fps, 1280×720 and one audio stream. This is a verified technical prototype, NOT a confirmed visual match to the reference; artist-grade facial plates are still needed.
+## 12-scene journey addendum (2026-11-14)
+
+The new `episodes/vegetable_shop/journey.py` and `journey_backgrounds.py` are the updated two-minute delivery path. Each setting lasts exactly ten seconds with a short dissolve; character sprites are transparent and reused; 44-line Kokoro timing is unchanged. New sound, face-animation and location guides are `docs/SOUND_GUIDE_KOKORO.txt`, `docs/ANIMATION_GUIDE_JOURNEY.txt`, and `docs/SCENE_PLAN_VEGETABLES.txt`. Local 120-second video validation passed, but visual reference matching still needs a human reviewer.

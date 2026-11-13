@@ -2,6 +2,24 @@
 
 **Reproducible illustrated-character video pipeline.** A pair of illustrated characters teach **rose**, **sunflower**, and **tulip** in a 30-second humorous dialogue. The animation uses facial keyframe patches, phoneme-timed mouth shapes, blinks, gentle head drift, dynamic close-ups, captions and audio post-processing.
 
+
+## Current video: Vegetable Adventure (12 places, upgraded face animation)
+
+The newest two-minute episode is [episodes/vegetable_shop/journey.py](episodes/vegetable_shop/journey.py): **12 different locations, exactly 10 seconds each**, same standing Max/Mia, gentle joke motion, phoneme-driven lip shapes, eye gaze and eased blinks. Existing **Kokoro ONNX** voices are retained, not eSpeak. Production files and asset provenance are tracked; large MP4/WAV exports are generated locally or via the manual-only [Vegetable Adventure GitHub Actions](.github/workflows/render-vegetable-journey.yml).
+
+Detailed developer text guides: [Sound / Kokoro / mixing](docs/SOUND_GUIDE_KOKORO.txt), [Animation and scene rendering](docs/ANIMATION_GUIDE_JOURNEY.txt), [12-stop timing](docs/SCENE_PLAN_VEGETABLES.txt), plus [episode README](episodes/vegetable_shop/README.md).
+
+```bash
+python -m pip install -r requirements.txt -r requirements-journey.txt
+python setup_audio_models.py
+python episodes/vegetable_shop/build.py --audio
+python episodes/vegetable_shop/journey.py --contact-sheet
+python episodes/vegetable_shop/journey.py
+python scripts/check_vegetable_journey.py episodes/vegetable_shop/output/Vegetable_Adventure_2_Minutes.mp4
+```
+
+**Quality status:** local MP4 passed 120.0 s, 3600 frames at 30 fps, 1280x720, one AAC audio track, subtitles and 12 unique scene comparisons. These technical checks do not certify visual similarity to the external video reference; eye/blink and scenery artwork remain preview-grade pending human review.
+
 ## What is in this repository
 
 - **Original source:** `render_cinematic.py`, `generate_speech.py`, `improve_audio.py`, `setup_audio_models.py`, `requirements.txt`.
