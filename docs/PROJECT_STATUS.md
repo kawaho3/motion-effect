@@ -38,3 +38,7 @@ This is an audit record. Don't label an untested workflow as passing.
 ## 2026-11-14: Vegetable Shop upgrade
 
 A second, independent 120-second episode source and Kokoro-only audio pipeline are now tracked at `episodes/vegetable_shop/`; it preserves all 44 lines from the earlier poor-quality eSpeak draft. Seven offline unit tests passed locally. The new concept image is tracked as `Scene_Concept.jpg`. Three aligned expression plates plus calibrated `rig.json` are **not** committed; the upgraded audio, video, and GitHub Actions run have **not** yet been remotely verified. No enhanced finished video is claimed. Full rendering is opt-in only.
+
+## 2026-11-14: Successful neural voice and local two-minute render
+
+GitHub Actions [run 43499211402](https://github.com/kawaho3/motion-effect/actions/runs/43499211402) produced 120s neural speech with no clipping, 44 timed lines, and no music. Local image-compositing then produced a 120s 1280×720 30fps MP4; `scripts/check_episode.py` passed duration/FPS/audio checks. The derived JPEG expressions and rig are committed as **preview-grade** reference assets. They are not visually endorsed as exact likeness to the requested reference video. Full video GitHub Actions validation remains pending until the `render-video` job completes.

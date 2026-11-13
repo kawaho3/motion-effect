@@ -26,3 +26,7 @@ The previous 120-second render used eSpeak at a high speech rate rather than the
 ## GitHub Actions validation note
 
 The first manual-audio branch run failed at dependency installation: NumPy 2.5.4 is incompatible with Python 3.11. The audio workflow was changed to Python 3.13; installation and synthesis still require a new successful run before claiming completion.
+
+## First neural render result (2026-11-14)
+
+The second neural-audio GitHub Actions workflow **succeeded** with exactly 120.0 seconds, -16.56 LUFS integrated loudness, -1.50 dBTP, zero clipped samples, no backing track, and phoneme timelines for all 44 shortened lines. The new local 1280×720 30fps video was rendered with scene-aligned **procedurally derived preview** mouth/blink JPEGs. `scripts/check_episode.py` confirmed 120.0s, 30fps, 1280×720 and one audio stream. This is a verified technical prototype, NOT a confirmed visual match to the reference; artist-grade facial plates are still needed.

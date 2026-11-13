@@ -165,7 +165,8 @@ def make_audio(*, script_file=HERE / 'script.json', music=None):
 
 
 def require_expression_plates():
-    paths = [ASSETS / name for name in ('Scene_Base.png', 'Scene_Ah_Blink.png', 'Scene_Oh.png')]
+    stems = ('Scene_Base', 'Scene_Ah_Blink', 'Scene_Oh')
+    paths = [(ASSETS / f'{name}.png') if (ASSETS / f'{name}.png').is_file() else (ASSETS / f'{name}.jpg') for name in stems]
     missing = [p.name for p in paths if not p.is_file()]
     if missing:
         raise FileNotFoundError('Aligned expression plates required; refusing crude mouth overlays: '
@@ -188,7 +189,7 @@ def active_pose(rows, character, at):
     return 'rest'
 
 
-def render_video():
+def render_video(preview_seconds=None):
     """Use spatially-aligned mouth/eye image patches, not painted oval overlays."""
     import numpy as np
     from PIL import Image, ImageDraw, ImageFont, ImageFilter
@@ -232,16 +233,18 @@ def render_video():
     font = ImageFont.truetype(font_path if Path(font_path).exists() else 'DejaVuSans.ttf', 29)
     sub_font = ImageFont.truetype(font_path if Path(font_path).exists() else 'DejaVuSans.ttf', 24)
     OUT.mkdir(parents=True, exist_ok=True)
-    outfile = OUT / 'Vegetable_Shop_Neural_2min.mp4'
+    render_duration = DURATION if preview_seconds is None else float(preview_seconds)
+    if not 0 < render_duration <= DURATION: raise ValueError('Preview seconds must be 0 to 120')
+    outfile = OUT / ('Vegetable_Shop_Neural_2min.mp4' if preview_seconds is None else 'Vegetable_Shop_preview.mp4')
     cmd = ['ffmpeg','-hide_banner','-loglevel','error','-y','-f','rawvideo','-pix_fmt','rgb24',
            '-s',f'{SIZE[0]}x{SIZE[1]}','-r',str(FPS),'-i','-', '-i',str(audio_path),
            '-i',str(OUT / 'vegetable_shop.srt'), '-map','0:v','-map','1:a','-map','2:s',
-           '-c:v','libx264','-preset','veryfast','-crf','19','-pix_fmt','yuv420p',
-           '-c:a','aac','-b:a','224k','-c:s','mov_text','-t','120',
+           '-c:v','libx264','-preset','ultrafast','-crf','20','-pix_fmt','yuv420p',
+           '-c:a','aac','-b:a','224k','-c:s','mov_text','-t',str(render_duration),
            '-movflags','+faststart',str(outfile)]
     proc = subprocess.Popen(cmd,stdin=subprocess.PIPE)
     try:
-        for i in range(round(DURATION*FPS)):
+        for i in range(round(render_duration*FPS)):
             t = i / FPS
             image = base.copy()
             for who in VOICE:
@@ -256,30 +259,33 @@ def render_video():
                         patch(image, ah, eye, 1)
             # Very slow camera push; no frame-duplication (actual 30 fps animation).
             joke_bounce = sum(.004 * math.exp(-abs(t-r['end'])*7) * math.sin(18*(t-r['end'])) for r in rows if r.get('joke') and abs(t-r['end']) < .4)
-            drift = 1.0 + .007 * math.sin(t*.26) + joke_bounce
-            if drift != 1:
+            drift = max(1.0, 1.0 + joke_bounce)
+            if abs(drift-1.0) > .0001:
                 cx,cy = ow/2,ohh/2
                 region = (cx-ow/(2*drift),cy-ohh/(2*drift),cx+ow/(2*drift),cy+ohh/(2*drift))
-                image = image.resize(SIZE, Image.Resampling.LANCZOS,box=region)
-            else:
-                image = image.resize(SIZE,Image.Resampling.LANCZOS)
+                image = image.resize(SIZE, Image.Resampling.BILINEAR,box=region)
             draw = ImageDraw.Draw(image)
             row = next((x for x in rows if x['start']-.05 <= t < x['end']+.05), None)
             if row:
-                draw.rounded_rectangle((48,602,1232,690),radius=18,fill=(14,30,28))
-                draw.text((66,612),row['speaker'].upper(),font=sub_font,fill=(255,212,117) if row['speaker']=='Max' else (144,244,217))
+                # Small unobtrusive subtitle with stroke, matching the earlier
+                # cinematic plate-compositing look rather than an oversized panel.
+                draw.text((45,24),row['speaker'].upper(),font=sub_font,
+                          fill=(255,209,124) if row['speaker']=='Max' else (144,244,217),
+                          stroke_width=2,stroke_fill=(30,39,35))
                 message = row['text']
-                if draw.textlength(message, font=sub_font) > 1140:
+                if draw.textlength(message,font=sub_font) > 1120:
                     words = message.split()
                     first = ''
-                    while words and draw.textlength((first + ' ' + words[0]).strip(), font=sub_font) < 1110:
-                        first = (first + ' ' + words.pop(0)).strip()
-                    draw.text((66,641),first,font=sub_font,fill='white')
-                    if words: draw.text((66,667),' '.join(words),font=sub_font,fill='white')
+                    while words and draw.textlength((first+' '+words[0]).strip(),font=sub_font) < 1080:
+                        first = (first+' '+words.pop(0)).strip()
+                    draw.text((SIZE[0]//2,650),first,font=sub_font,anchor='mm',fill='white',
+                              stroke_width=3,stroke_fill=(25,29,29))
+                    if words:
+                        draw.text((SIZE[0]//2,679),' '.join(words),font=sub_font,anchor='mm',fill='white',
+                                  stroke_width=3,stroke_fill=(25,29,29))
                 else:
-                    draw.text((66,648),message,font=sub_font,fill='white')
-                if row.get('joke') and row['end']-.35 <= t < row['end']+.22:
-                    draw.text((1040,48),'HA HA!',font=font,fill=(255,222,111),stroke_width=2,stroke_fill=(49,48,31))
+                    draw.text((SIZE[0]//2,675),message,font=sub_font,anchor='mm',fill='white',
+                              stroke_width=3,stroke_fill=(25,29,29))
             proc.stdin.write(image.tobytes())
             if i % 300 == 0: print(f'Rendered {i}/{round(DURATION*FPS)}',flush=True)
     except (BrokenPipeError,OSError):
@@ -298,12 +304,13 @@ def main(argv=None):
     parser.add_argument('--audio', action='store_true', help='Kokoro neural voices and exact timing')
     parser.add_argument('--render', action='store_true', help='Render aligned 2D expression plates')
     parser.add_argument('--music', type=Path, help='Optional licensed music; off by default')
+    parser.add_argument('--preview-seconds', type=float, help='Render only the first N seconds for visual QA')
     args = parser.parse_args(argv)
     rows = load_script()
     if args.check_script or not (args.audio or args.render):
         print(f'Script valid: {len(rows)} lines, characters Max & Mia, target 120s')
     if args.audio: make_audio(music=args.music)
-    if args.render: render_video()
+    if args.render: render_video(args.preview_seconds)
 
 
 if __name__ == '__main__':

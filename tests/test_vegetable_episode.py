@@ -45,8 +45,9 @@ class VegetableEpisodeTests(unittest.TestCase):
             self.assertIn('Mia: Carrots!',content)
 
     def test_expression_art_gate(self):
-        required = [veg.ASSETS / name for name in ('Scene_Base.png', 'Scene_Ah_Blink.png', 'Scene_Oh.png')]
-        if all(p.is_file() for p in required):
+        names = ('Scene_Base','Scene_Ah_Blink','Scene_Oh')
+        present = all((veg.ASSETS / (name+'.png')).is_file() or (veg.ASSETS / (name+'.jpg')).is_file() for name in names)
+        if present:
             self.assertEqual(len(veg.require_expression_plates()), 3)
         else:
             with self.assertRaises(FileNotFoundError):

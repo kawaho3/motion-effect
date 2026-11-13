@@ -21,11 +21,11 @@ The output directory is `episodes/vegetable_shop/output/`. Generated files inclu
 
 ## Full video requires artwork assets — quality gate
 
-Place the **same** 1672×941 (or other identical dimension) scene in three accurately registered files under `episodes/vegetable_shop/assets/`:
+This repository now ships three 1280×720 **procedurally derived preview** expression JPEGs under `episodes/vegetable_shop/assets/`. They allow reproducible video rendering, but their painted facial shapes are not visually approved and should be replaced with artist-refined, pixel-aligned PNG or JPEG plates at higher fidelity:
 
-1. `Scene_Base.png`: Max and Mia standing together, smiling, lips at rest, eyes open.
-2. `Scene_Ah_Blink.png`: same scene pixel-aligned except controlled mouth openings and closed eyes.
-3. `Scene_Oh.png`: same scene pixel-aligned except rounded speaking mouths; eyes open.
+1. `Scene_Base.png` (or `.jpg`): Max and Mia standing together, smiling, lips at rest, eyes open.
+2. `Scene_Ah_Blink.png` (or `.jpg`): same scene pixel-aligned except controlled mouth openings and closed eyes.
+3. `Scene_Oh.png` (or `.jpg`): same scene pixel-aligned except rounded speaking mouths; eyes open.
 
 Also provide `rig.json`, e.g.:
 
@@ -36,12 +36,12 @@ Also provide `rig.json`, e.g.:
 }
 ```
 
-**These coordinates are examples, not calibrated values.** Use a real frame inspection to set them. A single unaligned reference scene is insufficient for realistic lips. The renderer deliberately stops with a clear error rather than fabricating mouth ellipses and calling it lip sync. `python episodes/vegetable_shop/build.py --render` creates the MP4 when these files and the audio timeline exist.
+The repository includes `assets/rig.json` calibrated approximately to the new concept art; the numerical example above is illustrative only. Run `python episodes/vegetable_shop/make_plates.py` to reproduce the *preview* poses. It uses procedural face edits, which are not equivalent to hand-aligned high-end expression artwork and require visual approval. `python episodes/vegetable_shop/build.py --render` creates the MP4 when these files and the audio timeline exist.
 
 ## GitHub Actions usage
 
-Use **Actions → Vegetable Shop - neural audio and video → Run workflow → audio** to generate a high-quality voice draft; download the audio and SRT from the workflow's Artifacts section. Select `video` only after all four art files are added and calibrated. **No automatic heavy render runs on the main branch**, respecting usage limits. A dedicated `render-audio` branch can trigger a one-off neural-audio test upon push. GitHub-hosted runners may still consume GitHub Actions minutes depending on repository/plan settings.
+Use **Actions → Vegetable Shop - neural audio and video → Run workflow → audio** to generate a high-quality voice draft; download the audio and SRT from the workflow's Artifacts section. Select `video` to build the current preview-plate version, or add higher-quality, exactly aligned plates before doing so. **No automatic heavy render runs on the main branch**, respecting usage limits. Dedicated `render-audio` and `render-video` branches can trigger intentional one-off workflow runs upon push; regular main-branch commits never launch the heavy render. GitHub-hosted runners may still consume GitHub Actions minutes depending on repository/plan settings.
 
 ## Limitations
 
-Kokoro speech sounds more natural than eSpeak but still needs **human listening review**. Phoneme durations drive image-based mouth visemes; this is not full-face neural motion tracking. The workflow can prove technical media properties but **cannot certify that the look matches a YouTube reference** without visual comparison and approval. The original reference is not reproduced exactly. New artwork, manual facial registration, actual listening review, and a full successful render are required before calling this a final-quality replacement.
+Kokoro speech sounds more natural than eSpeak but still needs **human listening review**. Phoneme durations drive image-based mouth visemes; this is not full-face neural motion tracking. The workflow can prove technical media properties but **cannot certify that the look matches a YouTube reference** without visual comparison and approval. The original reference is not reproduced exactly. The locally generated 120-second HD draft passed FFprobe duration/FPS/audio checks but did not pass an artistic-reference match. Artist-refined facial plates and critical listening review remain recommended.
