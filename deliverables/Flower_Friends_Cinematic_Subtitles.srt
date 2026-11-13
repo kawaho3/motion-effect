@@ -1,0 +1,47 @@
+1
+00:00:00,450 --> 00:00:02,429
+Let's meet three flowers!
+
+2
+00:00:02,946 --> 00:00:04,390
+Do they tell jokes?
+
+3
+00:00:04,907 --> 00:00:06,545
+This is a rose.
+
+4
+00:00:07,062 --> 00:00:08,603
+A rose with a nose?
+
+5
+00:00:09,120 --> 00:00:11,908
+No, silly! Just lovely petals.
+
+6
+00:00:12,425 --> 00:00:14,169
+This is a sunflower.
+
+7
+00:00:14,687 --> 00:00:16,473
+Does it need sunglasses?
+
+8
+00:00:16,991 --> 00:00:19,801
+Maybe yours! And this is a tulip.
+
+9
+00:00:20,319 --> 00:00:22,041
+Two lips? Can it whistle?
+
+10
+00:00:22,559 --> 00:00:24,523
+Tulip! It's a flower!
+
+11
+00:00:25,041 --> 00:00:26,870
+Rose, sunflower, tulip!
+
+12
+00:00:27,387 --> 00:00:29,430
+Now you're a flower expert!
