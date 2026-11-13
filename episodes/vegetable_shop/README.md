@@ -10,7 +10,7 @@ This project supersedes the **previous low-quality eSpeak vegetable demo**. Its 
 
 ## Build high-quality dialogue locally
 
-Install Python 3.11, FFmpeg, root `requirements.txt`, and once run `python setup_audio_models.py` from repository root. This downloads and verifies Kokoro model weights; it does **not** use a hosted voice service.
+Install Python 3.13 (for the pinned NumPy requirements), FFmpeg, root `requirements.txt`, and once run `python setup_audio_models.py` from repository root. This downloads and verifies Kokoro model weights; it does **not** use a hosted voice service.
 
 ```sh
 python episodes/vegetable_shop/build.py --check-script

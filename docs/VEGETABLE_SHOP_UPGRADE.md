@@ -22,3 +22,7 @@ The previous 120-second render used eSpeak at a high speech rate rather than the
 5. Store large MP4/WAV as workflow artifacts or an approved release, not a routine source commit.
 
 **Status:** Source code and offline tests exist; neural output not verified in this transfer environment because model/runtime assets are absent. The renderer intentionally will not fabricate expression plates. The GitHub Actions workflow is configured but a successful remote run has not yet been confirmed.
+
+## GitHub Actions validation note
+
+The first manual-audio branch run failed at dependency installation: NumPy 2.5.4 is incompatible with Python 3.11. The audio workflow was changed to Python 3.13; installation and synthesis still require a new successful run before claiming completion.
