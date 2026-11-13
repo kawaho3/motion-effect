@@ -180,7 +180,7 @@ def main():
         return
     dest=OUT/'Flower_Friends_30_Seconds.mp4'
     cmd=['ffmpeg','-y','-v','warning','-f','rawvideo','-pix_fmt','rgb24','-s',f'{W}x{H}','-r',str(FPS),'-i','-',
-        '-i',str(WORK/'audio.wav'),'-i',str(OUT/'Flower_Friends_Cinematic_Subtitles.srt'),
+        '-i',str(WORK/('audio.wav' if (WORK/'audio.wav').exists() else 'audio.mp3')),'-i',str(OUT/'Flower_Friends_Cinematic_Subtitles.srt'),
         '-map','0:v','-map','1:a','-map','2:s','-c:v','libx264','-preset','fast','-crf','18','-pix_fmt','yuv420p',
         '-c:a','aac','-b:a','256k','-c:s','mov_text','-metadata:s:s:0','language=eng',
         '-metadata','title=Flower Friends — cinematic revision','-t','30','-movflags','+faststart',str(dest)]
