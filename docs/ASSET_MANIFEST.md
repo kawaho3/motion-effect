@@ -17,7 +17,7 @@ The original `Flower_Friends_Editable_Project.zip` included 29 entries under `Fl
 | `deliverables/Flower_Friends_Script.txt` | Script |
 | `deliverables/Flower_Friends_Cinematic_Subtitles.srt` | Captions |
 
-If binary assets are absent from your clone, extract the original ZIP into your working tree, keeping the path names above. Avoid committing large encoded final MP4 artifacts directly to Git; use GitHub Releases or Git LFS if repository policy allows.
+The repository already includes smaller JPEG keyframes and an MP3 voice track for direct rendering. To use original quality, or if required binary assets are absent from your clone, extract the original ZIP into your working tree, keeping the path names above. Avoid committing large encoded final MP4 artifacts directly to Git; use GitHub Releases or Git LFS if repository policy allows.
 
 ## Reusing character assets
 The facial region rectangles in `render_cinematic.py` assume exact 1672×941 coordinates; new art demands updated ROI bounding boxes. The three expression plates should all be generated from the *same* base scene so every pixel except the mouth/eye region remains aligned.
