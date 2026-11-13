@@ -7,8 +7,9 @@
 - Python dependencies `requirements.txt`
 - Original phoneme timeline, dialogue script, subtitles
 - Original archive's README and separate developer handoff
+- Optimized versions of the original 1672×941 artwork in `assets/*.jpg` and compressed soundtrack `work/audio.mp3`; renderer has PNG/WAV fallback and the JPEG/MP3 mode has passed a local still-frame smoke test
 
-## In the recovered ZIP (binary / media assets)
+## Not yet committed at original quality (binary / media assets)
 - `assets/Garden_Base.png` (1672×941), `assets/Garden_Ah_Blink.png`, `assets/Garden_Oh.png`
 - `assets/DejaVuSans-Bold.ttf` and `assets/DejaVu_Font_License.txt`
 - `work/audio.wav`, individual `work/neural_raw_*.wav`
@@ -27,8 +28,8 @@
 
 ## Next acceptance tests
 1. Fresh clone in clean environment; dependency installation.
-2. Confirm required artwork, font and master WAV exist.
-3. Run `python render_cinematic.py --stills` and inspect patched visemes/eyeblinks.
+2. Confirm included JPEG artwork and MP3 audio exist; optionally supply original PNG plates, font and WAV master.
+3. Run `python render_cinematic.py --stills` and inspect patched visemes/eyeblinks (already succeeded locally for optimized mode on 2026-11-13).
 4. Full 900-frame render, check final MP4 audio and subtitles.
 5. Iterate based on user's original visual-quality feedback.
 
