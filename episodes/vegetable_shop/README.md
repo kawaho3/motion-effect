@@ -86,3 +86,6 @@ Use **Actions → Vegetable Shop - neural audio and video → Run workflow → a
 ## Limitations
 
 Kokoro speech sounds more natural than eSpeak but still needs **human listening review**. Phoneme durations drive image-based mouth visemes; this is not full-face neural motion tracking. The workflow can prove technical media properties but **cannot certify that the look matches a YouTube reference** without visual comparison and approval. The original reference is not reproduced exactly. The locally generated 120-second HD draft passed FFprobe duration/FPS/audio checks but did not pass an artistic-reference match. Artist-refined facial plates and critical listening review remain recommended.
+### Verified hosted render (2026-11-14)
+
+[GitHub Actions run 43516290455](https://github.com/kawaho3/motion-effect/actions/runs/43516290455) completed successfully on the opt-in `render-journey` branch. The hosted runner generated a 120.0-second, 3600-frame, 30fps HD H.264/AAC video and verified all 12 scene comparisons. [Download its GitHub artifact](https://github.com/kawaho3/motion-effect/actions/runs/43516290455/artifacts/14080498610) (7-day retention; scheduled expiration November 20, 2026). Rendered media are **not permanent Git-tracked binaries**. Visual/reference quality and listening review remain separate human acceptance tasks.
