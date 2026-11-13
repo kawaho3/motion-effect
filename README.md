@@ -79,3 +79,9 @@ motion-effect/
     ASSET_MANIFEST.md
     ORIGINAL_PROJECT_README.md
 ```
+
+## New: Vegetable Shop (2-minute neural episode)
+
+The old eSpeak-based demo was rejected for robotic voices and artificial facial movement. The source-controlled replacement lives in [episodes/vegetable_shop](episodes/vegetable_shop/README.md), with the original 44 dialogue lines, an offline **Kokoro timed-phoneme** audio pipeline, spatially aligned face-plate renderer, and quality checks. A [new scene concept](episodes/vegetable_shop/assets/Scene_Concept.jpg) is included, but **aligned expression plates and a calibrated facial rig are not yet supplied**. Do not claim a finished 2-minute neural video exists until those assets and a verified render are available.
+
+[Automated lightweight tests](.github/workflows/ci.yml) run on push/PR. The [manual-only neural audio/video workflow](.github/workflows/render-vegetable-shop.yml) uploads outputs as GitHub Actions artifacts; choose **audio** first and **video** only when the three aligned plates and rig.json have been added. See [postmortem and acceptance checks](docs/VEGETABLE_SHOP_UPGRADE.md).

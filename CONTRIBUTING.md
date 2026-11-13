@@ -2,11 +2,11 @@
 
 ## Project orientation
 
-The main product must **isolate an animated character**, preserve that character's original movement, and export **real transparency with zero audio**, using local/free tools. Read docs/PROJECT_BRIEF.md, docs/ARCHITECTURE.md, docs/STATUS.md and docs/ROADMAP.md before coding. Never equate a historical finished export with code in this repository.
+The main product must **isolate an animated character**, preserve that character's original movement, and export **real transparency with zero audio**, using local/free tools. Read docs/foreground/PROJECT_BRIEF.md, docs/foreground/ARCHITECTURE.md, docs/foreground/STATUS.md and docs/foreground/ROADMAP.md before coding. Never equate a historical finished export with code in this repository.
 
 ## Developer setup
 
-- Install Python and FFmpeg/ffprobe; run python -m pip install -r requirements.txt in a virtual environment.
+- Install Python and FFmpeg/ffprobe; run python -m pip install -r requirements-extraction.txt for foreground extraction (or requirements.txt for neural speech) in a virtual environment.
 - Run python -m unittest discover -s tests -v and python -m py_compile scripts/extract_character.py.
 - For a real video change, test with a rights-cleared clip in WebM and MOV and document environment, duration, FPS and known visual problems.
 - Check true alpha against black and white backgrounds, no sound tracks, no missing body parts and appropriate timing.
@@ -18,7 +18,7 @@ The main product must **isolate an animated character**, preserve that character
 - Keep the decode, matte, temporal refinement, encode and quality-check stages separate as the project grows.
 - No private links, credentials, user-uploaded media, copyrighted sample video, paid model weights or giant renders in regular Git commits.
 - Clearly mark proposed features vs code tested end-to-end. Document licenses of every imported model and asset.
-- No automatic cloud CI has been enabled here to respect compute/credit constraints. Run tests locally.
+- Lightweight GitHub Actions CI runs Python tests on push/PR; full neural voice/video rendering is **manual-only** to limit usage. Still run tests locally.
 - Project-wide licensing remains an owner decision. Do not presume third-party media can be re-licensed.
 
 ## Good first contributions
@@ -33,4 +33,8 @@ python scripts/verify_export.py output/synthetic-demo/synthetic_reference_alpha.
 python -m unittest discover -s tests -v
 ```
 
-Read [the complete handoff](docs/PROJECT_HANDOFF.md) and [the evidence record](docs/VERIFIED_MEDIA.md) before claiming parity with prior outputs. ProRes 4444 is the default MOV export; the original source video, licensed footage and its exact extraction script are NOT in this public repo.
+Read [the complete handoff](docs/foreground/PROJECT_HANDOFF.md) and [the evidence record](docs/foreground/VERIFIED_MEDIA.md) before claiming parity with prior outputs. ProRes 4444 is the default MOV export; the original source video, licensed footage and its exact extraction script are NOT in this public repo.
+
+## Vegetable Shop episode
+
+Start with [episodes/vegetable_shop/README.md](episodes/vegetable_shop/README.md). The image concept and script are checked in; high-quality aligned facial plates and rig calibration are still required. Do not publish the previous eSpeak render as the upgraded neural episode.

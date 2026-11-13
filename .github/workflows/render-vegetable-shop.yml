@@ -1,0 +1,56 @@
+name: Vegetable Shop - neural audio and video
+on:
+  workflow_dispatch:
+    inputs:
+      output:
+        description: 'Audio only, or full video when three calibrated expression plates and rig.json are committed'
+        required: true
+        type: choice
+        options: [audio, video]
+        default: audio
+permissions:
+  contents: read
+concurrency:
+  group: vegetable-render-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  render:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Require real expression plates for video
+        if: inputs.output == 'video'
+        shell: bash
+        run: |
+          for f in Scene_Base.png Scene_Ah_Blink.png Scene_Oh.png rig.json; do
+            test -s "episodes/vegetable_shop/assets/$f" || { echo "Missing aligned asset: $f" >&2; exit 1; }
+          done
+      - name: Install FFmpeg and neural audio dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+      - name: Download verified free Kokoro weights (one-time per runner)
+        run: python setup_audio_models.py
+      - name: Generate aligned neural voices, subtitles, QA report
+        run: python episodes/vegetable_shop/build.py --audio
+      - name: Render 30fps HD episode
+        if: inputs.output == 'video'
+        run: |
+          python episodes/vegetable_shop/build.py --render
+          python scripts/check_episode.py episodes/vegetable_shop/output/Vegetable_Shop_Neural_2min.mp4
+      - name: Upload outputs without committing large media
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: vegetable-shop-${{ inputs.output }}-${{ github.run_number }}
+          path: episodes/vegetable_shop/output/
+          if-no-files-found: warn
+          retention-days: 7

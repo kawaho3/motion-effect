@@ -1,20 +1,28 @@
-# Python
+# Python environment and local caches
 __pycache__/
 *.py[cod]
 .venv/
 venv/
 .pytest_cache/
-# Model weights downloaded on demand
+# Downloaded models (do not commit model weights)
 models/
 *.onnx
 *.bin
-# Generated outputs / bulky working media
+# Input, output and oversized generated media
+input/
+output/
+**/output/
 work/neural_raw_*.wav
+work/neural_clean_*.wav
+work/dialogue.wav
+work/music.wav
+work/audio.wav
 work/still_*.jpg
 work/blink_*.jpg
 deliverables/*.mp4
+deliverables/*.wav
 deliverables/*_Preview.jpg
-# OS and editors
+# Editor and OS
 .DS_Store
 Thumbs.db
 .vscode/
