@@ -1,0 +1,138 @@
+{
+  "sample_rate": 48000,
+  "duration": 30.0,
+  "integrated_lufs": -16.499999999999996,
+  "true_peak_dbtp": -1.5956865738589592,
+  "peak_safety_gain_db": 0.0,
+  "clipped_samples": 0,
+  "engine": "Kokoro ONNX 0.6.1 / v1.0 fp16, local CPU",
+  "voices": {
+    "Mia": "af_heart",
+    "Max": "am_puck"
+  },
+  "native_synthesis_speed": 0.8,
+  "interline_pause_seconds": 0.5973484848484851,
+  "last_word_end": 29.3500625,
+  "line_processing": [
+    {
+      "line": 1,
+      "character": "Mia",
+      "before_lufs": -25.557648543250362,
+      "after_lufs": -18.500000017680463,
+      "maximum_deess_db": 2.6999999999892568,
+      "maximum_compression_db": 0.6377710043786395,
+      "peak_safety_gain_db": 0.0,
+      "true_peak_dbtp": -4.875928872426697
+    },
+    {
+      "line": 2,
+      "character": "Max",
+      "before_lufs": -19.295828604333206,
+      "after_lufs": -18.500000000000025,
+      "maximum_deess_db": 2.6999999999892568,
+      "maximum_compression_db": 2.654147640138617,
+      "peak_safety_gain_db": 0.0,
+      "true_peak_dbtp": -5.527733046511081
+    },
+    {
+      "line": 3,
+      "character": "Mia",
+      "before_lufs": -26.04489326341153,
+      "after_lufs": -18.93110814927227,
+      "maximum_deess_db": 2.699977833106292,
+      "maximum_compression_db": 1.1467063340394859,
+      "peak_safety_gain_db": -0.4311081449655838,
+      "true_peak_dbtp": -1.4999999999999982
+    },
+    {
+      "line": 4,
+      "character": "Max",
+      "before_lufs": -19.3566331449507,
+      "after_lufs": -18.499999999996785,
+      "maximum_deess_db": 2.6999999984056666,
+      "maximum_compression_db": 2.8477734804067896,
+      "peak_safety_gain_db": 0.0,
+      "true_peak_dbtp": -5.135080489433406
+    },
+    {
+      "line": 5,
+      "character": "Mia",
+      "before_lufs": -26.032680178014314,
+      "after_lufs": -18.500000008574712,
+      "maximum_deess_db": 2.699999999962502,
+      "maximum_compression_db": 0.9194106056898972,
+      "peak_safety_gain_db": 0.0,
+      "true_peak_dbtp": -1.733808511299547
+    },
+    {
+      "line": 6,
+      "character": "Mia",
+      "before_lufs": -26.158778663315342,
+      "after_lufs": -19.0169837839913,
+      "maximum_deess_db": 2.699998935927799,
+      "maximum_compression_db": 1.6221975669252418,
+      "peak_safety_gain_db": -0.5169837778002331,
+      "true_peak_dbtp": -1.5000000000000018
+    },
+    {
+      "line": 7,
+      "character": "Max",
+      "before_lufs": -20.628563402856813,
+      "after_lufs": -18.499999999999996,
+      "maximum_deess_db": 2.699999999962502,
+      "maximum_compression_db": 2.0818351841458513,
+      "peak_safety_gain_db": 0.0,
+      "true_peak_dbtp": -3.4879681372285254
+    },
+    {
+      "line": 8,
+      "character": "Mia",
+      "before_lufs": -25.99194471707418,
+      "after_lufs": -20.3577783331868,
+      "maximum_deess_db": 2.6993789871811495,
+      "maximum_compression_db": 0.5640612036590456,
+      "peak_safety_gain_db": -1.857778329202748,
+      "true_peak_dbtp": -1.4999999999999993
+    },
+    {
+      "line": 9,
+      "character": "Max",
+      "before_lufs": -20.25674617559818,
+      "after_lufs": -18.500000000000007,
+      "maximum_deess_db": 2.6999999991072428,
+      "maximum_compression_db": 3.0031413031574807,
+      "peak_safety_gain_db": 0.0,
+      "true_peak_dbtp": -4.224053402702172
+    },
+    {
+      "line": 10,
+      "character": "Mia",
+      "before_lufs": -25.142832236265296,
+      "after_lufs": -18.500000003666738,
+      "maximum_deess_db": 2.699877420189641,
+      "maximum_compression_db": 0.5861593718335836,
+      "peak_safety_gain_db": 0.0,
+      "true_peak_dbtp": -4.840377203400546
+    },
+    {
+      "line": 11,
+      "character": "Max",
+      "before_lufs": -20.633412997667694,
+      "after_lufs": -18.50000000000001,
+      "maximum_deess_db": 2.6999999999997293,
+      "maximum_compression_db": 2.5455709298534934,
+      "peak_safety_gain_db": 0.0,
+      "true_peak_dbtp": -4.164392161114126
+    },
+    {
+      "line": 12,
+      "character": "Mia",
+      "before_lufs": -25.98963759703535,
+      "after_lufs": -18.69886279172945,
+      "maximum_deess_db": 2.6995721544221873,
+      "maximum_compression_db": 0.6873854732802666,
+      "peak_safety_gain_db": -0.19886277986787138,
+      "true_peak_dbtp": -1.5000000000000009
+    }
+  ]
+}
