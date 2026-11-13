@@ -1,6 +1,8 @@
 name: Vegetable Adventure - 12 locations
 
 on:
+  push:
+    branches: [render-journey]  # deliberate one-off opt-in branch, never main
   workflow_dispatch:
     inputs:
       preview:
