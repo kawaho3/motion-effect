@@ -1,0 +1,7 @@
+{
+  "decoded_sample_rate": 48000,
+  "decoded_duration": 30.016,
+  "loudness_lufs": -16.51246888744935,
+  "true_peak_dbtp": -1.6064682963084007,
+  "clipped_samples": 0
+}
