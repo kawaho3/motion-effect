@@ -26,7 +26,7 @@ ffmpeg -version
 ```
 
 ## 4. Input and output contract
-The renderer assumes 1672×941 aligned source artwork and uses hardcoded ROI coordinates in `render_cinematic.py`. All three frames **must have exactly aligned facial landmarks**, not merely similar poses:
+The checked-in lightweight clone already includes JPEG plates and an MP3 soundtrack. The renderer chooses higher-fidelity original PNG plates and WAV audio automatically when available. The renderer assumes 1672×941 aligned source artwork and uses hardcoded ROI coordinates in `render_cinematic.py`. All three frames **must have exactly aligned facial landmarks**, not merely similar poses:
 - `assets/Garden_Base.png` — eyes open, mouths resting
 - `assets/Garden_Ah_Blink.png` — blink plus open 'ah' mouth
 - `assets/Garden_Oh.png` — eyes open, rounded 'oh' mouth
@@ -35,7 +35,7 @@ The renderer assumes 1672×941 aligned source artwork and uses hardcoded ROI coo
 - `work/timeline.json` — dialogue row start/end/phones
 - `deliverables/Flower_Friends_Cinematic_Subtitles.srt`
 
-The original art and audio are inside the project archive `Flower_Friends_Editable_Project.zip` recovered from the project's ChatGPT Library. Large source media may need to be copied into this working tree if not checked into Git. See `docs/PROJECT_STATUS.md`.
+Higher-fidelity original art and audio are inside the project archive `Flower_Friends_Editable_Project.zip` recovered from the project's ChatGPT Library. The compressed media needed for basic rendering is already tracked in Git. Original PNGs, the WAV audio master, neural raw clips and the final MP4 have not been imported. See `docs/PROJECT_STATUS.md`.
 
 ```bash
 python render_cinematic.py --stills  # fast smoke test, writes work/still_*.jpg
