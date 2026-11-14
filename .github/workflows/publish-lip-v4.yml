@@ -1,0 +1,87 @@
+name: Publish Vegetable Adventure v4 - improved lips
+
+# Cost-conscious: only run after explicit developer trigger or the dedicated branch.
+on:
+  workflow_dispatch:
+  push:
+    branches: [release-lip-v4]
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install only lightweight face compositor dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python -m pip install -r requirements-journey.txt
+      - name: Check lip phonemes, scene timing and sprite preservation
+        run: python -m unittest discover -s tests -v
+      - name: Reuse existing verified offline Kokoro dialogue (no paid TTS)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p episodes/vegetable_shop/output
+          gh run download 43516290455 --repo "${{ github.repository }}" \
+            --name vegetable-adventure-1 --dir episodes/vegetable_shop/output
+          test -s episodes/vegetable_shop/output/vegetable_shop.wav
+          test -s episodes/vegetable_shop/output/timeline.json
+          test -s episodes/vegetable_shop/output/vegetable_shop.srt
+      - name: Render speech-timed facial animation and varied camera shots
+        run: |
+          python episodes/vegetable_shop/journey.py --quality 25
+          python scripts/check_vegetable_journey.py episodes/vegetable_shop/output/Vegetable_Adventure_2_Minutes.mp4
+      - name: Generate small standalone MP4 and direct-download files
+        run: |
+          mkdir -p dist
+          cp episodes/vegetable_shop/output/Vegetable_Adventure_2_Minutes.mp4 dist/Vegetable_Adventure_v4_HD.mp4
+          cp episodes/vegetable_shop/output/Vegetable_Adventure_12_Places.jpg dist/Vegetable_Adventure_v4_Scenes.jpg
+          cp docs/LIP_REFERENCE_ANALYSIS.txt dist/LIP_REFERENCE_ANALYSIS.txt
+          cp docs/SOUND_GUIDE_KOKORO.txt dist/SOUND_GUIDE_KOKORO.txt
+          ffmpeg -hide_banner -loglevel error -y \
+            -i dist/Vegetable_Adventure_v4_HD.mp4 \
+            -map 0:v:0 -map 0:a:0 -c:v libx264 -preset fast -crf 32 \
+            -pix_fmt yuv420p -c:a aac -b:a 112k -movflags +faststart \
+            dist/Vegetable_Adventure_v4_Smaller.mp4
+          (cd dist && sha256sum *.mp4 *.txt > SHA256SUMS.txt)
+          ls -lh dist/
+      - name: Publish separate MP4 files to GitHub Releases, not ZIP
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > /tmp/release-v4.md <<'EOF'
+          ## Vegetable Adventure v4 — improved speaking mouths
+          Rebuilt from the previous source-controlled 120-second episode using
+          speech-timed closed/A/E/O/F/soft mouth art and speaker close-ups.
+          Two separate, ordinary MP4 files are attached; **no ZIP required**.
+          The offline Kokoro neural soundtrack is unchanged.
+
+          The user's 20-second Rose-in-the-Garden video was used only as a
+          private visual reference; its media are not uploaded here.
+
+          Technical QA: 120 seconds, 3600 frames, 30fps, 1280×720,
+          one audio track, subtitles, 12 visually distinct locations.
+          **Not a pixel-identical reproduction** of the reference video.
+          Artist-rigged mouth/eye artwork is a possible next improvement.
+          EOF
+          if gh release view vegetable-adventure-v4-lips --repo "${{ github.repository }}" >/dev/null 2>&1; then
+            gh release upload vegetable-adventure-v4-lips dist/* --clobber --repo "${{ github.repository }}"
+          else
+            gh release create vegetable-adventure-v4-lips dist/* \
+              --repo "${{ github.repository }}" \
+              --title 'Vegetable Adventure v4 — improved lips and close-ups' \
+              --notes-file /tmp/release-v4.md
+          fi
+      - name: Show direct URLs
+        run: |
+          echo 'https://github.com/${{ github.repository }}/releases/tag/vegetable-adventure-v4-lips'
+          echo 'https://github.com/${{ github.repository }}/releases/download/vegetable-adventure-v4-lips/Vegetable_Adventure_v4_Smaller.mp4'

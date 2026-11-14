@@ -54,3 +54,7 @@ GitHub Actions [run 43499211402](https://github.com/kawaho3/motion-effect/action
 ### Verified hosted render (2026-11-14)
 
 [GitHub Actions run 43516290455](https://github.com/kawaho3/motion-effect/actions/runs/43516290455) completed successfully on the opt-in `render-journey` branch. The hosted runner generated a 120.0-second, 3600-frame, 30fps HD H.264/AAC video and verified all 12 scene comparisons. [Download its GitHub artifact](https://github.com/kawaho3/motion-effect/actions/runs/43516290455/artifacts/14080498610) (7-day retention; scheduled expiration November 20, 2026). Rendered media are **not permanent Git-tracked binaries**. Visual/reference quality and listening review remain separate human acceptance tasks.
+
+## Reference-informed lip rig v4 (2026-11-15)
+
+The 20-second Rose-in-the-Garden user video was visually inspected as a private reference. We added visible source-adjacent smile/closed/A/E/O/F/soft mouth poses, more stable phoneme timing (ignores stress/length markers), 3-frame smoothing, and speaker close-ups, preserving 12 ten-second locations and offline Kokoro dialogue. Local 120s full render and metadata QA passed; 15 local tests passed, including alpha-preservation and differentiated mouth pixel checks. A new opt-in GitHub Release workflow can render and publish ordinary MP4s. This is a procedural 2D baseline and still requires human artistic acceptance; the reference media is not committed.

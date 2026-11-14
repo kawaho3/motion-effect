@@ -1,0 +1,36 @@
+REFERENCE: Morning_English_A_Rose_in_the_Garden (1).mp4
+Duration: 20.000 seconds; 1920x1080; 24fps; H.264 + AAC + subtitles.
+Analysis was performed from the user-provided video for this project.
+
+OBSERVED REFERENCE MOTION
+- Wide establishing shot first, then cuts into different speaker-focused medium shots.
+- The talking character's mouth visibly shifts from resting/closed to open
+  and rounded speech shapes. Lip shapes are not merely a stretched smile.
+- Non-speaking people generally keep a relaxed mouth expression.
+- Eyes and heads have restrained motion; body movement is secondary.
+- Subtitles remain at the bottom after the camera changes.
+
+OUR PRIOR DEFECTS
+- Old renderer warped the same original smiling pixels in a tiny ROI.
+  Its six labels did not correspond to clearly different mouth openings.
+- Camera remained wide, reducing the mouth to a few screen pixels.
+- Most dialogue was visually indistinguishable from a still illustration.
+
+CHANGES
+- Introduced mouth_rig.py with distinct closed, soft, E, A, O and F/V
+  mouth variants, retaining transparent sprites and colored watercolor lips.
+- Pose switching is driven by Kokoro timed phonemes (not audio amplitude).
+- Three-frame smooth transitions retained; only current speaker's lips move.
+- Every 10-second location gets a wide establishing and closing shot, with
+  medium character close-ups during dialogue. Scenes remain 10 seconds long.
+- The renderer keeps eye-blink/gaze and short joke reactions.
+
+LIMITATIONS / ACCEPTANCE
+- These are procedural sprite-based mouth illustrations; this is not
+  pixel-identical reproduction of third-party imagery or neural full-face
+  performance capture. Artist-painted aligned phoneme sprites remain the
+  optimal next quality step.
+- Human review against this reference is essential: confirm mouth seams,
+  eye motion, pronunciation, and speaker timing through the whole video.
+- Run unit tests and render a 20-second preview before the full two minutes.
+- Large rendered media should be distributed as GitHub Releases, not Git blobs.

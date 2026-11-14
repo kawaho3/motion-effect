@@ -1,0 +1,64 @@
+LIP MOTION V4 — DEVELOPER HANDOFF
+=================================
+Purpose: improve the 2-minute Max/Mia Vegetable Adventure animation based on
+observations of the owner-supplied, 20-second 'Morning English: A Rose in the
+Garden' reference, without copying its protected character designs or footage.
+
+FILES
+- episodes/vegetable_shop/mouth_rig.py: procedural viseme atlas renderer.
+- episodes/vegetable_shop/journey.py: timed phoneme controls, camera closeups,
+  scene switches and export.
+- docs/LIP_REFERENCE_ANALYSIS.txt: source-grounded review and known limits.
+- tests/test_mouth_rig.py: checks distinct mouth pixels, alpha stability,
+  phoneme groups and conversational framing.
+- .github/workflows/publish-lip-v4.yml: deliberate opt-in GitHub Release MP4.
+
+VOICE / ALIGNMENT
+Existing 48 kHz, stereo Kokoro ONNX voice (Mia=af_heart, Max=am_puck),
+with work/output timeline.json created by build.py --audio, is reused.
+Phoneme entries have speaker, text, start, end, and phones with start/end.
+Never substitute arbitrary audio-envelope mouth flapping for this alignment.
+Ignore ˈ/ˌ/ː stress/length markers as visemes; hold a vowel across these.
+Make short vowels visible for roughly three frames at 30fps.
+
+POSES
+M/B/P -> closed lips.
+A/ɑ/æ -> vertically open dark mouth with subtle teeth/tongue.
+E/I/ɛ -> horizontally open with a teeth strip.
+O/U/ɔ/ʊ -> rounded smaller dark opening.
+F/V -> narrow teeth-over-lip pose.
+Other spoken consonants -> lightly open/soft.
+Silence -> original smiling artwork unchanged.
+Eyes -> existing independent smooth blinks and listener gaze.
+3-frame transitions soften switches and reduce single-frame jitter.
+
+CAMERA
+Each 10-second location retains its own scenery and cuts. At the start
+(0-1.75s within each location) and the end (8.4-10s), use wide framing.
+In between, crop to the current speaker's face/torso to make lips visible.
+Render subtitles AFTER cropping to avoid cut-off. Never let a second actor
+be partially visible at the edge of a speaker close-up.
+
+LOCAL VERIFICATION
+python -m pip install -r requirements-journey.txt
+python -m unittest discover -s tests -v
+python episodes/vegetable_shop/journey.py --preview-seconds 20
+python episodes/vegetable_shop/journey.py
+python scripts/check_vegetable_journey.py episodes/vegetable_shop/output/Vegetable_Adventure_2_Minutes.mp4
+
+GITHUB RELEASE
+Push the source changes. To publish ordinary MP4 instead of ZIP,
+open Actions and manually run 'Publish Vegetable Adventure v4 - improved lips'.
+The workflow downloads the prior rights-cleared render's Kokoro WAV/timeline
+from GitHub Actions run 43516290455 (artifact retention expires 2026-11-20),
+then renders the new scene locally on the runner; no TTS regeneration needed.
+If that artifact expires, generate a fresh audio timeline via build.py --audio
+and update this workflow to use the fresh run's output.
+
+KNOWN LIMITS
+The source artwork's mouth is only tens of pixels across and was
+originally a smiling still. Procedural mouth replacements visibly articulate
+but cannot provide the nuanced mouth/jaw/cheek details of a properly
+artist-rigged face or a reference-grade neural animation model. The existing
+eye blinks are another image-compositing approximation. Human inspection is
+required before claiming parity with the reference. No extra paid APIs.

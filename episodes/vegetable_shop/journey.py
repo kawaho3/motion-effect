@@ -18,6 +18,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 from journey_backgrounds import STOPS, render_background
+from mouth_rig import mouth_variant
 
 HERE=Path(__file__).resolve().parent
 ASSETS=HERE/'assets'
@@ -32,7 +33,7 @@ FACES={
     'Max':{'mouth':(166,149),'eyes':[(139,111,17,10),(191,106,17,10)]},
     'Mia':{'mouth':(166,162),'eyes':[(137,123,19,12),(196,120,19,12)]},
 }
-POSES=('rest','closed','a','e','o','soft')
+POSES=('rest','closed','a','e','o','soft','f')
 
 
 def load_timeline(path=None):
@@ -53,6 +54,7 @@ def phoneme_pose(p):
         return 'rest'
     c=p[0]
     if c in 'mbp':return 'closed'
+    if c in 'fv':return 'f'
     if c in 'aɑæʌɐ':return 'a'
     if c in 'oɔʊuwɒ':return 'o'
     if c in 'eiɪɛɜɚə':return 'e'
@@ -60,6 +62,12 @@ def phoneme_pose(p):
 
 
 def build_controls(timeline,fps=FPS,length=DURATION):
+    """Map Kokoro phoneme intervals to stable visible mouth articulation.
+
+    Avoid the old problem where separate stress/vowel-length markers closed the
+    lips and where 25ms vowels were invisible after 30fps frame sampling.
+    Active speech holds a soft talking pose, while true pauses stay relaxed.
+    """
     n=int(round(fps*length))
     pose={who:['rest']*n for who in VOICE}
     line={who:[False]*n for who in VOICE}
@@ -71,11 +79,29 @@ def build_controls(timeline,fps=FPS,length=DURATION):
         for f in range(first,last):
             line[who][f]=True
             joke[who][f]=bool(row.get('joke'))
+            pose[who][f]='soft'
         for entry in row.get('phones',[]):
-            first=max(0,int(math.floor((entry['start']-.012)*fps)))
-            last=min(n,int(math.ceil((entry['end']-.012)*fps)))
-            v=phoneme_pose(entry['phone'])
-            for f in range(first,last):pose[who][f]=v
+            ph=entry.get('phone','')
+            if ph in ('ˈ','ˌ','ː',' ','','.',',','!','?'):
+                continue  # timing annotations, not independent closure shapes
+            v=phoneme_pose(ph)
+            a=max(first,int(math.floor((entry['start']-.015)*fps)))
+            b=min(last,int(math.ceil((entry['end']+.008)*fps)))
+            if v in ('a','e','o') and b-a<3:
+                center=int(round((entry['start']+entry['end'])/2*fps))
+                a=max(first,center-1)
+                b=min(last,center+2)
+            if v=='closed' and b-a<2:
+                b=min(last,a+2)
+            for f in range(a,b):pose[who][f]=v
+    # Eliminate single-frame viseme flips, retaining distinct closure targets.
+    for who in VOICE:
+        states=pose[who]
+        filtered=states.copy()
+        for i in range(1,n-1):
+            if states[i-1]==states[i+1] and states[i]!=states[i-1]:
+                filtered[i]=states[i-1]
+        pose[who]=filtered
     return pose,line,joke
 
 
@@ -108,31 +134,8 @@ def _eye_closed_patch(img,eyes):
     return Image.fromarray(rgba,'RGBA')
 
 
-def _mouth_warp(im,mouth,pose):
-    """Warp the painted *original* smile, retaining source color and teeth detail."""
-    if pose=='rest':return im
-    import cv2
-    import numpy as np
-    x,y=mouth
-    # (source x-scale,source y-scale).  No invented solid-color ellipses.
-    sx,sy={
-        'closed':(1.0,1.60),'a':(1.0,.77),
-        'e':(.82,.92),'o':(1.37,.78),'soft':(1.06,1.15)
-    }[pose]
-    rgba=np.array(im)
-    x0=max(0,x-51);x1=min(rgba.shape[1],x+52)
-    y0=max(0,y-30);y1=min(rgba.shape[0],y+30)
-    region=rgba[y0:y1,x0:x1,:]
-    xx,yy=np.meshgrid(np.arange(x0,x1,dtype='float32'),np.arange(y0,y1,dtype='float32'))
-    dx=xx-x;dy=yy-y
-    influence=np.exp(-((dx/31)**4+(dy/13)**4))
-    mapx=xx+dx*(sx-1)*influence
-    mapy=yy+dy*(sy-1)*influence
-    warped=cv2.remap(rgba,mapx,mapy,cv2.INTER_CUBIC,borderMode=cv2.BORDER_REPLICATE)
-    opacity=np.exp(-((dx/37)**4+(dy/19)**4))*.98
-    rgba[y0:y1,x0:x1,:]=np.clip(region*(1-opacity[...,None])+warped*opacity[...,None],0,255).astype('uint8')
-    return Image.fromarray(rgba,'RGBA')
-
+# Mouth rig is implemented by mouth_rig.mouth_variant, preserving this module's
+# original external controls API. Its visemes are visibly distinct at close-up.
 
 def _gaze_shift(im,eyes,direction):
     if direction==0:return im
@@ -167,7 +170,7 @@ class Actor:
         key=(pose,gaze,closed)
         if key not in self.cache:
             source=self.closed_base if closed else self.native
-            img=_mouth_warp(source,self.face['mouth'],pose)
+            img=mouth_variant(source,self.face['mouth'],pose)
             if not closed:img=_gaze_shift(img,self.face['eyes'],gaze)
             self.cache[key]=img.resize((self.width,self.height),Image.Resampling.LANCZOS)
         return self.cache[key]
@@ -243,7 +246,30 @@ def _actor_image(actor,pose,gaze,t,transition=None):
     return sprite
 
 
-def render_frame(t,timeline,controls,actors,backgrounds):
+def camera_shot(t, timeline):
+    """Match the reference's wide-to-close-up conversational grammar.
+
+    Every 10-second location begins and ends wide. During the middle of the
+    location, use a stable close-up of the person whose dialogue is active;
+    silence between adjacent lines holds the last speaker's framing.
+    """
+    age=t%SCENE_SECONDS
+    if age<1.75 or age>=8.4:return 'wide'
+    preceding=[r for r in timeline if r['start']<=t+.04]
+    if not preceding:return 'wide'
+    return preceding[-1]['speaker']
+
+
+def camera_frame(frame, shot):
+    """Do NOT add subtitles until after the crop: keep text on-screen."""
+    if shot=='wide':return frame
+    # Enlarges the mouth from ~20px to ~35px, like reference conversational cuts.
+    left=0 if shot=='Max' else 540
+    right=left+740
+    return frame.crop((left,0,right,416)).resize((WIDTH,HEIGHT),Image.Resampling.BICUBIC)
+
+
+def render_frame(t,timeline,controls,actors,backgrounds,cinematic=True):
     frameidx=min(len(controls[0]['Max'])-1,int(t*FPS))
     scene=min(len(STOPS)-1,int(t/SCENE_SECONDS))
     bg=backgrounds[scene]
@@ -284,6 +310,8 @@ def render_frame(t,timeline,controls,actors,backgrounds):
         x+=int(10*math.sin(scene*.9+(0 if who=='Max' else 1.7)))
         y=HEIGHT-actor.height-23+dy
         frame.paste(sprite,(x,y),sprite)
+    if cinematic:
+        frame=camera_frame(frame,camera_shot(t,timeline))
     return _title_and_captions(frame,t,timeline)
 
 

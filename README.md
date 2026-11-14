@@ -31,6 +31,16 @@ If ChatGPT attachments fail with "This action couldn't be completed" or Chrome b
 These are GitHub **Release assets**, not expiring GitHub Actions ZIP artifacts. If a security program flags any file, investigate rather than overriding its warning. The reproducible manual publishing workflow is in `.github/workflows/publish-vegetable-direct.yml`.
 
 
+
+## Vegetable Adventure v4 — reference-informed lip animation
+
+The user supplied a 20-second *Morning English: A Rose in the Garden* video as a **private visual reference**. We reviewed its speaker-focused camera cuts and visible mouth articulation. The reference video itself is **not** redistributed.
+
+The updated [2-minute renderer](episodes/vegetable_shop/journey.py) now uses [seven speech/idle mouth poses](episodes/vegetable_shop/mouth_rig.py) (smile/rest, lips closed, A, E, rounded O, F/V, and soft speech), preserves Kokoro timed phonemes, eases pose changes, and cuts from wide establishing shots to speaker close-ups. Max and Mia still visit 12 different locations, changing every 10 seconds. [Reference findings](docs/LIP_REFERENCE_ANALYSIS.txt) and [developer setup](docs/LIP_MOTION_DEVELOPER_GUIDE.txt) include what was measured, why the old animation lacked visible lips, remaining limitations, and how to reproduce.
+
+**Current QA:** local full render passed 120 seconds, 3600 frames at 30 fps, 1280×720, AAC audio, subtitles and 12 settings; 15 unit tests pass. Artwork is still a procedural 2D illustration, not full facial performance capture or an exact visual recreation of the reference. [GitHub Release workflow](.github/workflows/publish-lip-v4.yml) deliberately runs only on request or the `release-lip-v4` branch; it publishes ordinary MP4s rather than blocked Actions ZIP artifacts.
+
+
 ## What is in this repository
 
 - **Original source:** `render_cinematic.py`, `generate_speech.py`, `improve_audio.py`, `setup_audio_models.py`, `requirements.txt`.
