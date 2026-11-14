@@ -41,6 +41,12 @@ The updated [2-minute renderer](episodes/vegetable_shop/journey.py) now uses [se
 **Current QA:** local full render passed 120 seconds, 3600 frames at 30 fps, 1280×720, AAC audio, subtitles and 12 settings; 15 unit tests pass. Artwork is still a procedural 2D illustration, not full facial performance capture or an exact visual recreation of the reference. [GitHub Release workflow](.github/workflows/publish-lip-v4.yml) deliberately runs only on request or the `release-lip-v4` branch; it publishes ordinary MP4s rather than blocked Actions ZIP artifacts.
 
 
+
+### Download the verified v4 lip-animation video directly
+
+[Vegetable Adventure v4 GitHub Release](https://github.com/kawaho3/motion-effect/releases/tag/vegetable-adventure-v4-lips) was successfully published by [GitHub Actions run 43643225730](https://github.com/kawaho3/motion-effect/actions/runs/43643225730). It contains ordinary standalone [smaller MP4](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v4-lips/Vegetable_Adventure_v4_Smaller.mp4) and [HD MP4](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v4-lips/Vegetable_Adventure_v4_HD.mp4), a storyboard, source-reference analysis, Kokoro guide and checksums — no ZIP needed. 120s/30fps/12-scene output validated. Camera and mouth updates still require owner visual acceptance for exact reference-like motion.
+
+
 ## What is in this repository
 
 - **Original source:** `render_cinematic.py`, `generate_speech.py`, `improve_audio.py`, `setup_audio_models.py`, `requirements.txt`.
