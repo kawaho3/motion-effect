@@ -20,6 +20,17 @@ python scripts/check_vegetable_journey.py episodes/vegetable_shop/output/Vegetab
 
 **Quality status:** local MP4 passed 120.0 s, 3600 frames at 30 fps, 1280x720, one AAC audio track, subtitles and 12 unique scene comparisons. These technical checks do not certify visual similarity to the external video reference; eye/blink and scenery artwork remain preview-grade pending human review.
 
+## Direct MP4 downloads (no ZIP required)
+
+If ChatGPT attachments fail with "This action couldn't be completed" or Chrome blocks the zipped GitHub Actions artifact, use the public [Vegetable Adventure v3 GitHub Release](https://github.com/kawaho3/motion-effect/releases/tag/vegetable-adventure-v3). It includes two individually downloadable MP4 videos and the TXT developer guides, plus SHA256 checksums:
+
+- [Smaller MP4 (5.5 MB)](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v3/Vegetable_Adventure_Lighter.mp4)
+- [HD MP4 (34.5 MB)](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v3/Vegetable_Adventure_2_Minutes_HD.mp4)
+- [Kokoro sound guide TXT](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v3/SOUND_GUIDE_KOKORO.txt)
+
+These are GitHub **Release assets**, not expiring GitHub Actions ZIP artifacts. If a security program flags any file, investigate rather than overriding its warning. The reproducible manual publishing workflow is in `.github/workflows/publish-vegetable-direct.yml`.
+
+
 ## What is in this repository
 
 - **Original source:** `render_cinematic.py`, `generate_speech.py`, `improve_audio.py`, `setup_audio_models.py`, `requirements.txt`.
