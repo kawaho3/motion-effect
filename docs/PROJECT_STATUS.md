@@ -67,3 +67,9 @@ The 20-second Rose-in-the-Garden user video was visually inspected as a private 
 - Local render passed: 120.000s, 3600 frames, 30fps, 1280x720, one AAC audio stream, one subtitles stream and 12 scene changes; 18 local Python tests passed.
 - New GitHub opt-in release workflow publishes MP4 and small version directly, not ZIP.
 - Remaining quality challenge: original project rig/layer files are unavailable and exact visual motion parity has not been proven. Further human visual review required.
+
+## GitHub v5 release 43645864012 (2026-11-15)
+
+- [x] GitHub Actions full v5 video workflow passed; separate direct MP4 assets and mouth pose atlas published.
+- [x] Lightweight CI passed on run 43645953122 after OpenCV dependency fix.
+- [ ] Exact artistic matching remains a human quality gate; original reference source rig is unavailable.
