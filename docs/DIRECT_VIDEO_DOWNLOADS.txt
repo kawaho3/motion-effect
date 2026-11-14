@@ -1,0 +1,20 @@
+# Direct-download fallback for Vegetable Adventure
+
+If ChatGPT file downloads show "This action couldn't be completed" or Chrome blocks a GitHub Actions ZIP, DO NOT override Chrome's warning.
+
+The project publishes two plain MP4 files and three TXT guides via a GitHub Release instead of the default zipped Actions artifact.
+
+GitHub Release landing page:
+https://github.com/kawaho3/motion-effect/releases/tag/vegetable-adventure-v3
+
+Direct small MP4:
+https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v3/Vegetable_Adventure_Lighter.mp4
+
+Direct HD MP4:
+https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v3/Vegetable_Adventure_2_Minutes_HD.mp4
+
+Release TXT files: SOUND_GUIDE_KOKORO.txt, ANIMATION_GUIDE_JOURNEY.txt, SCENE_PLAN_VEGETABLES.txt, SHA256SUMS.txt.
+
+The videos contain no installation program. GitHub Release assets are downloaded one at a time, without a ZIP. A browser/antivirus warning can still occur and should be investigated, not bypassed.
+
+Source artifact: GitHub Actions run 43516290455, artifact vegetable-adventure-1. The release workflow downloads this verified render, checks its 120-second duration, compresses an optional small MP4, and attaches the files to the Release. No video model, speech model, or GPU render is repeated.

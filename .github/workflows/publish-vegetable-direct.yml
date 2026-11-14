@@ -1,0 +1,86 @@
+name: Publish Vegetable Adventure — direct MP4 downloads
+
+# This workflow is deliberately opt-in. It does NOT run on routine main pushes.
+on:
+  push:
+    branches: [publish-vegetable-video]
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out developer guides
+        uses: actions/checkout@v4
+
+      - name: Download previously validated 12-location render
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist/incoming dist/release
+          gh run download 43516290455 --repo "${{ github.repository }}" --name vegetable-adventure-1 --dir dist/incoming
+          find dist/incoming -maxdepth 4 -type f -printf '%P (%s bytes)\n'
+
+      - name: Export real standalone files (no ZIP)
+        run: |
+          set -euo pipefail
+          VIDEO=$(find dist/incoming -type f -name 'Vegetable_Adventure_2_Minutes.mp4' -print -quit)
+          test -n "$VIDEO" && test -s "$VIDEO"
+          cp "$VIDEO" dist/release/Vegetable_Adventure_2_Minutes_HD.mp4
+          DURATION=$(ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 "$VIDEO")
+          python3 - "$DURATION" <<'PY'
+          import sys
+          duration=float(sys.argv[1])
+          if abs(duration-120)>0.1:
+              raise SystemExit(f"Invalid duration: {duration}")
+          print("Validated full video duration:",duration)
+          PY
+          # A much smaller, browser-friendly 720p file. Keep the full HD original too.
+          ffmpeg -hide_banner -loglevel error -y -i "$VIDEO" \
+            -map 0:v:0 -map 0:a:0 -sn -c:v libx264 -preset medium \
+            -crf 32 -pix_fmt yuv420p -c:a aac -b:a 112k \
+            -movflags +faststart dist/release/Vegetable_Adventure_Lighter.mp4
+          cp docs/SOUND_GUIDE_KOKORO.txt docs/ANIMATION_GUIDE_JOURNEY.txt docs/SCENE_PLAN_VEGETABLES.txt dist/release/
+          (cd dist/release && sha256sum *.mp4 *.txt > SHA256SUMS.txt)
+          ls -lh dist/release/
+
+      - name: Publish permanent GitHub Release download links
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          cat > dist/release-notes.md <<'EOF'
+          ## Vegetable Adventure — two-minute 12-location video
+
+          Direct, separately downloadable MP4 videos and developer TXT guides.
+          **No ZIP or executable installer is required.**
+
+          - Vegetable_Adventure_2_Minutes_HD.mp4 — original 1280×720, 30fps, 120 seconds, AAC sound.
+          - Vegetable_Adventure_Lighter.mp4 — smaller 1280×720 MP4 with AAC, for easier downloads.
+          - SOUND_GUIDE_KOKORO.txt — Kokoro ONNX neural audio setup/processing.
+          - ANIMATION_GUIDE_JOURNEY.txt — lip/eye and scene pipeline.
+          - SCENE_PLAN_VEGETABLES.txt — 12 locations, each 10 seconds.
+          - SHA256SUMS.txt — integrity checksums.
+
+          Published from already successful GitHub Actions run 43516290455. This is a 2D animation prototype; visual realism still needs human review. If your browser flags the files, do not bypass its malware warnings.
+          EOF
+          if gh release view vegetable-adventure-v3 --repo "${{ github.repository }}" > /dev/null 2>&1; then
+            gh release upload vegetable-adventure-v3 dist/release/* --clobber --repo "${{ github.repository }}"
+          else
+            gh release create vegetable-adventure-v3 dist/release/* \
+              --repo "${{ github.repository }}" \
+              --title "Vegetable Adventure v3 — direct MP4 and developer guides" \
+              --notes-file dist/release-notes.md
+          fi
+
+      - name: Print direct-download URLs
+        run: |
+          echo "https://github.com/${{ github.repository }}/releases/tag/vegetable-adventure-v3"
+          echo "https://github.com/${{ github.repository }}/releases/download/vegetable-adventure-v3/Vegetable_Adventure_Lighter.mp4"
+          echo "https://github.com/${{ github.repository }}/releases/download/vegetable-adventure-v3/Vegetable_Adventure_2_Minutes_HD.mp4"
