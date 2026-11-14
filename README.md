@@ -47,6 +47,18 @@ The updated [2-minute renderer](episodes/vegetable_shop/journey.py) now uses [se
 [Vegetable Adventure v4 GitHub Release](https://github.com/kawaho3/motion-effect/releases/tag/vegetable-adventure-v4-lips) was successfully published by [GitHub Actions run 43643225730](https://github.com/kawaho3/motion-effect/actions/runs/43643225730). It contains ordinary standalone [smaller MP4](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v4-lips/Vegetable_Adventure_v4_Smaller.mp4) and [HD MP4](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v4-lips/Vegetable_Adventure_v4_HD.mp4), a storyboard, source-reference analysis, Kokoro guide and checksums — no ZIP needed. 120s/30fps/12-scene output validated. Camera and mouth updates still require owner visual acceptance for exact reference-like motion.
 
 
+
+## New: v5 directly reference-calibrated lip artwork
+
+The uploaded 20-second *Morning English — A Rose in the Garden* clip was examined frame by frame (private reference; not republished). The prior v4 code contained a real **4x supersampling coordinate bug**: the lip outlines were painted at unscaled coordinates and the mouth looked like an unconnected dark line. The corrected [v5 mouth rig](episodes/vegetable_shop/mouth_rig.py) now draws the oral cavity, lip outlines, teeth, and soft lip highlights at the same supersampled scale. Phoneme-timed mouth cels use two-frame transitions instead of three. Max and Mia keep their 12 ten-second scenes and existing Kokoro audio.
+
+- [Reference analysis and honest limits](docs/REFERENCE_MOTION_V5.md)
+- [Generate a seven-pose face contact sheet](episodes/vegetable_shop/make_viseme_atlas.py): `python episodes/vegetable_shop/make_viseme_atlas.py`
+- [Extra mask/articulation regression tests](tests/test_reference_mouth_v5.py)
+- [Opt-in GitHub Action that renders and publishes separate direct MP4 files](.github/workflows/publish-lip-v5.yml)
+
+Local verification: **18 tests passed**, full two-minute output has 3600 frames at 30fps, 1280x720 H.264, AAC stereo track and subtitle stream, and 12 verified location changes. This does not imply exact artistic equivalence to the reference. You cannot extract the original creator's layered mouth rigs from an MP4 alone.
+
 ## What is in this repository
 
 - **Original source:** `render_cinematic.py`, `generate_speech.py`, `improve_audio.py`, `setup_audio_models.py`, `requirements.txt`.

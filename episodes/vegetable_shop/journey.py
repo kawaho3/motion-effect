@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Vegetable Adventure: 12 ten-second scenes, face-safe visemes and natural blinks.
+"""Vegetable Adventure v5: reference-calibrated mouth visemes and natural blinks.
 
 Uses *existing* Kokoro audio/timeline produced by build.py --audio.  No eSpeak,
 no model/API at render time.  Faces and mouths are image-warped rather than
@@ -282,7 +282,7 @@ def render_frame(t,timeline,controls,actors,backgrounds,cinematic=True):
     for who,actor in actors.items():
         p=pose[who][frameidx]
         old=pose[who][max(0,frameidx-1)]
-        # Three-frame changeovers instead of one-frame lip snapping.
+        # Match the reference's mostly held mouth cels with brief 2-frame changes.
         run=0
         if old!=p:
             run=0
@@ -290,7 +290,7 @@ def render_frame(t,timeline,controls,actors,backgrounds,cinematic=True):
             for i in range(1,5):
                 if frameidx-i<0 or pose[who][frameidx-i]!=p:break
                 run=i
-        transition=(pose[who][max(0,frameidx-run-1)],min(1,(run+1)/3.)) if run<3 else None
+        transition=(pose[who][max(0,frameidx-run-1)],min(1,(run+1)/2.)) if run<2 else None
         # When one actor speaks, the other occasionally looks toward them.
         gazedir=(1 if who=='Max' else -1) if not line[who][frameidx] else 0
         if int(t*1.1)%4==0:gazedir=0

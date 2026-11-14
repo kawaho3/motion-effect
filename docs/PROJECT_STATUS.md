@@ -58,3 +58,12 @@ GitHub Actions [run 43499211402](https://github.com/kawaho3/motion-effect/action
 ## Reference-informed lip rig v4 (2026-11-15)
 
 The 20-second Rose-in-the-Garden user video was visually inspected as a private reference. We added visible source-adjacent smile/closed/A/E/O/F/soft mouth poses, more stable phoneme timing (ignores stress/length markers), 3-frame smoothing, and speaker close-ups, preserving 12 ten-second locations and offline Kokoro dialogue. Local 120s full render and metadata QA passed; 15 local tests passed, including alpha-preservation and differentiated mouth pixel checks. A new opt-in GitHub Release workflow can render and publish ordinary MP4s. This is a procedural 2D baseline and still requires human artistic acceptance; the reference media is not committed.
+
+## Reference-calibrated visemes v5 (2026-11-15)
+
+- Fixed source-renderer 4x coordinate mismatch on lip outlines, preserving face mask/alpha and original watercolor cheeks.
+- Repaired and enlarged distinct closed, A/E/O, F/V and soft speech mouth drawings with proper teeth/cavity/contours. Two-frame transitions reduce ghosting relative to prior three-frame blend.
+- New direct video reference analysis in docs/REFERENCE_MOTION_V5.md, without embedding or distributing reference footage.
+- Local render passed: 120.000s, 3600 frames, 30fps, 1280x720, one AAC audio stream, one subtitles stream and 12 scene changes; 18 local Python tests passed.
+- New GitHub opt-in release workflow publishes MP4 and small version directly, not ZIP.
+- Remaining quality challenge: original project rig/layer files are unavailable and exact visual motion parity has not been proven. Further human visual review required.

@@ -1,13 +1,13 @@
-"""Face-local 2D mouth rig for watercolor characters.
+"""Reference-calibrated, watercolor mouth visemes for Max and Mia.
 
-Purpose: render actual mouth articulation on a fixed illustrated character,
-not simply squeeze the character's existing smile. Six visible phoneme groups
-are generated from a restored skin patch with softly antialiased lip outlines,
-teeth and tongue. The rest pose is untouched original artwork.
+The source video uses a handful of conspicuous, held 2D mouth states, not
+continuous smile stretching. This rig keeps the original character's painted
+face and alpha, inpaints just the original resting smile, and renders shaded
+viseme artwork in supersampled pixel space. No reference-video pixels are used.
 
-Everything is deterministic and runs offline. A true artist-aligned mouth atlas
-would offer better fidelity; the procedural atlas is a licensed-source-independent
-baseline, not a claim of full neural facial animation.
+Key v5 fix: all paths, including upper/lower lip outlines, are drawn in the
+same supersampled coordinate system. The previous version drew contours at
+unscaled coordinates and produced a flat dark slash.
 """
 from __future__ import annotations
 import math
@@ -15,95 +15,107 @@ from PIL import Image, ImageDraw, ImageFilter
 import cv2
 import numpy as np
 
-# Shapes: half-width, half-open height, lip line width, teeth fraction.
-# Native PNG sprite pixels, before resize to video space.
+# half-width, approx max opening height, teeth visibility (0-1)
 MOUTHS = {
-    'closed': (25.0, 0.6, 1.8, 0.00),
-    'soft':   (22.0, 5.3, 1.7, 0.18),
-    'e':      (25.5, 7.0, 1.7, 0.44),
-    'a':      (23.5, 13.0, 2.0, 0.27),
-    'o':      (11.2, 11.0, 2.0, 0.00),
-    'f':      (22.5, 3.1, 1.6, 0.68),
-    'rest':   (0, 0, 0, 0)
+    'rest': (0,0,0),
+    'closed': (24, 0, 0),
+    'soft': (20, 5.8, .12),
+    'e': (27, 9.5, .75),
+    'a': (24, 17, .16),
+    'o': (13.5, 17, 0),
+    'f': (23, 4.0, .80),
 }
 
-def _inpaint_smile(image: Image.Image, mouth: tuple[int,int]):
-    """Remove only original smile; preserve painterly skin around it."""
-    rgba=np.asarray(image.convert('RGBA')).copy()
-    rgb=rgba[:,:,:3]
-    h,w=rgb.shape[:2]
-    cx,cy=mouth
-    # Original smiles are about 57px wide with shallow teeth.
-    mask=np.zeros((h,w),dtype=np.uint8)
-    cv2.ellipse(mask,(cx,cy+1),(35,13),0,0,360,255,-1,cv2.LINE_AA)
-    filled=cv2.inpaint(cv2.cvtColor(rgb,cv2.COLOR_RGB2BGR),mask,7,cv2.INPAINT_TELEA)
-    filled=cv2.cvtColor(filled,cv2.COLOR_BGR2RGB)
-    a=cv2.GaussianBlur(mask,(0,0),2.3).astype('float32')[:,:,None]/255.0
-    rgb=np.clip(rgb*(1-a)+filled*a,0,255).astype('uint8')
-    rgba[:,:,:3]=rgb
-    return Image.fromarray(rgba,'RGBA')
 
-def _interp_curve(cx,cy,rx,ry,samples=49):
-    u=np.linspace(-1,1,samples)
-    # Mouth edges turn upward and meet in a smile; interior opens centrally.
-    upper=[(cx+rx*t, cy-ry*0.36*(1-t*t)-1.0*t*t) for t in u]
-    lower=[(cx+rx*t, cy+ry*0.72*(1-t*t)-1.0*t*t) for t in u]
+def _hide_resting_smile(source, center):
+    rgb=np.asarray(source.convert('RGB')).copy()
+    cx,cy=center
+    mask=np.zeros(rgb.shape[:2],np.uint8)
+    # Feather only the original mouth, not the nose or chin. Preserve cheeks.
+    cv2.ellipse(mask,(cx,cy+1),(32,12),0,0,360,255,-1,cv2.LINE_AA)
+    repair=cv2.inpaint(rgb,mask,7,cv2.INPAINT_TELEA)
+    weight=cv2.GaussianBlur(mask,(0,0),2.1).astype(np.float32)/255.0
+    painted=np.clip(rgb*(1-weight[...,None])+repair*weight[...,None],0,255).astype('uint8')
+    painted_img=Image.fromarray(painted,'RGB').convert('RGBA')
+    painted_img.putalpha(source.getchannel('A'))
+    return painted_img
+
+
+def _pixel_points(points,s):
+    return [(round(x*s),round(y*s)) for x,y in points]
+
+
+def _curves(cx,cy,rx,height,rounding=.48):
+    us=np.linspace(-1,1,65)
+    upper=[];lower=[]
+    for t in us:
+        shoulder=max(0,1-t*t)**rounding
+        upper.append((cx+rx*t,cy-height*.39*shoulder-1.4*t*t))
+        lower.append((cx+rx*t,cy+height*.62*shoulder-1.4*t*t))
     return upper,lower
 
-def _scale_pts(points,factor):
-    return [(int(round(x*factor)),int(round(y*factor))) for x,y in points]
 
-def mouth_variant(source:Image.Image, mouth:tuple[int,int], pose:str)->Image.Image:
-    """Render one of six distinct naturally shaded phoneme mouth shapes."""
+def mouth_variant(source:Image.Image, center:tuple[int,int], pose:str)->Image.Image:
+    """Return an unchanged-alpha, fully registered original-art viseme image."""
     if pose=='rest':return source
-    if pose not in MOUTHS:raise ValueError('Unknown viseme '+str(pose))
-    cx,cy=mouth
-    base=_inpaint_smile(source,mouth)
-    # Draw the small mouth at 4x resolution for natural lip edges.
+    if pose not in MOUTHS:raise ValueError('Unknown mouth pose '+str(pose))
+    cx,cy=center
+    base=_hide_resting_smile(source,center)
+    x0,y0,x1,y1=cx-48,cy-31,cx+49,cy+34
+    crop=base.crop((x0,y0,x1,y1))
     scale=4
-    box=(cx-47,cy-25,cx+48,cy+26)
-    patch=base.crop(box).resize(((box[2]-box[0])*scale,(box[3]-box[1])*scale),Image.Resampling.BICUBIC)
-    d=ImageDraw.Draw(patch,'RGBA')
-    rx,ry,line,teeth=MOUTHS[pose]
-    lx,ly=(cx-box[0],cy-box[1])
-    upper,lower=_interp_curve(lx,ly,rx,ry)
-    up=_scale_pts(upper,scale)
-    lo=_scale_pts(lower,scale)
-    border=(111,47,44,235)
-    inner=(69,28,35,255)
+    high=crop.resize((crop.width*scale,crop.height*scale),Image.Resampling.BICUBIC)
+    art=ImageDraw.Draw(high,'RGBA')
+    local_x,local_y=cx-x0,cy-y0
+    rx,h,teeth=MOUTHS[pose]
+    x=int(local_x*scale);y=int(local_y*scale)
     if pose=='closed':
-        # Deliberate tight M/B/P closure: lips together, no oval.
-        shape=[(lx+rx*t,ly+0.9*(1-t*t)-2*t*t) for t in np.linspace(-1,1,65)]
-        d.line(_scale_pts(shape,scale),fill=border,width=7,joint='curve')
-        d.arc(((lx-23)*scale,(ly-3)*scale,(lx+23)*scale,(ly+6)*scale),0,178,fill=(185,83,70,110),width=2)
+        t=np.linspace(-1,1,65)
+        curve=_pixel_points([(local_x+rx*u,local_y+1.2*(1-u*u)-1.2*u*u) for u in t],scale)
+        art.line(curve,fill=(96,44,42,255),width=6,joint='curve')
+        # Lower lip is modest shading, as in the source face.
+        offset=[(px,py+4) for px,py in curve[4:-4]]
+        art.line(offset,fill=(197,92,83,120),width=3,joint='curve')
     else:
-        poly=up+list(reversed(lo))
-        d.polygon(poly,fill=inner)
-        # Anti-aliased lip contour and modest watercolor highlight.
-        d.line(up,fill=border,width=max(5,round(line*scale)),joint='curve')
-        d.line(lo,fill=(139,66,61,188),width=max(4,round((line-.3)*scale)),joint='curve')
-        if pose in ('a','e','f','soft'):
-            if teeth>0:
-                # Teeth are a narrow pale curved band, not a white rectangle.
-                band=[]
-                for t in np.linspace(-.78,.78,40):
-                    inset=(1-t*t)
-                    band.append((lx+rx*t,ly-ry*.23*inset))
-                bottom=[]
-                for t in np.linspace(.78,-.78,40):
-                    inset=(1-t*t)
-                    bottom.append((lx+rx*t,ly+(ry*(teeth-.29))*inset))
-                d.polygon(_scale_pts(band+bottom,scale),fill=(247,221,199,255))
-        if pose in ('a','o'):
-            tw=rx*(.58 if pose=='a' else .47)
-            top=ly+ry*.42
-            d.ellipse((int((lx-tw)*scale),int(top*scale),int((lx+tw)*scale),int((ly+ry*.67)*scale)),fill=(184,77,85,210))
-    # Blend only within small feathered patch, so edits avoid visible seams.
-    overlay=patch.resize((box[2]-box[0],box[3]-box[1]),Image.Resampling.LANCZOS)
-    feather=Image.new('L',overlay.size,0)
-    fd=ImageDraw.Draw(feather)
-    fd.ellipse((5,5,overlay.width-5,overlay.height-5),fill=255)
-    feather=feather.filter(ImageFilter.GaussianBlur(3))
-    base.paste(overlay,box[:2],feather)
-    base.putalpha(source.getchannel('A'))  # preserve every silhouette pixel exactly
+        top,bot=_curves(local_x,local_y,rx,h,.68 if pose=='o' else .45)
+        top_px=_pixel_points(top,scale)
+        bot_px=_pixel_points(bot,scale)
+        outline=top_px+list(reversed(bot_px))
+        art.polygon(outline,fill=(73,30,37,255))
+        # Subtle oral cavity vertical tone, not an unshaded dark ellipse.
+        if pose in ('a','o','soft'):
+            ry=max(3,round(h*.37*scale))
+            art.ellipse((x-int(rx*.56*scale), y+int(.27*h*scale),
+                         x+int(rx*.56*scale),y+int(.27*h*scale)+ry),fill=(139,49,68,160))
+        if teeth>0:
+            # Teeth use creamy watercolor rather than a solid neon white bar.
+            height=max(2,h*teeth*.45)
+            tooth_top=[];tooth_bottom=[]
+            for u in np.linspace(-.80,.80,50):
+                swell=max(0,1-u*u)**.55
+                tooth_top.append((local_x+rx*u,local_y-h*.35*swell+1.0))
+            for u in np.linspace(.80,-.80,50):
+                swell=max(0,1-u*u)**.55
+                tooth_bottom.append((local_x+rx*u,local_y+(-h*.35+height)*swell+1.0))
+            art.polygon(_pixel_points(tooth_top+tooth_bottom,scale),fill=(243,216,195,252))
+            # Tooth highlight along upper edge, kept narrow.
+            art.line(_pixel_points(tooth_top,scale),fill=(255,239,220,170),width=2)
+        # SUPER-SAMPLED PATH FIX (old implementation omitted scale here).
+        art.line(top_px,fill=(111,48,45,255),width=7,joint='curve')
+        art.line(bot_px,fill=(163,76,67,227),width=6,joint='curve')
+        # Lip corners and a soft lower-lip shine blend with native face texture.
+        for px,py in (top_px[0],top_px[-1]):
+            art.ellipse((px-3,py-3,px+3,py+3),fill=(95,47,42,255))
+        if h>=8:
+            mid=bot_px[len(bot_px)//2]
+            art.arc((mid[0]-round(rx*.59*scale),mid[1]-2,
+                     mid[0]+round(rx*.59*scale),mid[1]+11),5,177,
+                     fill=(229,126,109,100),width=3)
+    patch=high.resize(crop.size,Image.Resampling.LANCZOS)
+    feather=Image.new('L',patch.size,0)
+    d=ImageDraw.Draw(feather)
+    d.ellipse((3,3,patch.width-4,patch.height-4),fill=255)
+    feather=feather.filter(ImageFilter.GaussianBlur(3.2))
+    base.paste(patch,(x0,y0),feather)
+    base.putalpha(source.getchannel('A'))
     return base
