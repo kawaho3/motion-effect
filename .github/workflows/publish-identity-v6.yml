@@ -1,4 +1,4 @@
-name: Publish Vegetable Adventure v6 - reference-matched mouth poses
+name: Publish Vegetable Adventure v6 - identity-locked mouth poses
 
 # Cost-conscious: only run after explicit developer trigger or the dedicated branch.
 on:
@@ -16,7 +16,7 @@ jobs:
     timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
       - name: Install only lightweight face compositor dependencies
@@ -53,8 +53,7 @@ jobs:
           cp episodes/vegetable_shop/output/Vegetable_Adventure_2_Minutes.mp4 dist/Vegetable_Adventure_v6_HD.mp4
           cp episodes/vegetable_shop/output/Vegetable_Adventure_12_Places.jpg dist/Vegetable_Adventure_v6_Scenes.jpg
           cp docs/REFERENCE_MOTION_V5.md dist/REFERENCE_MOTION_V5.md
-          python episodes/vegetable_shop/make_viseme_atlas.py
-          cp episodes/vegetable_shop/output/Vegetable_Adventure_v6_Visemes.jpg dist/Vegetable_Adventure_v6_Visemes.jpg
+          cp /tmp/Identity_Locked_Faces.jpg dist/Vegetable_Adventure_v6_Visemes.jpg
           cp docs/SOUND_GUIDE_KOKORO.txt dist/SOUND_GUIDE_KOKORO.txt
           ffmpeg -hide_banner -loglevel error -y \
             -i dist/Vegetable_Adventure_v6_HD.mp4 \
@@ -69,7 +68,8 @@ jobs:
         run: |
           cat > /tmp/release-v6.md <<'EOF'
           ## Vegetable Adventure v6 — reference-calibrated mouth visemes
-          Rendered with one source portrait per character and a strict lip-only mask.\n          Rebuilt from the previous source-controlled 120-second episode using corrected 4x supersampled lip outlines and
+          Rendered with one source portrait per character and a strict lip-only mask.
+          Rebuilt from the previous source-controlled 120-second episode using corrected 4x supersampled lip outlines and
           speech-timed closed/A/E/O/F/soft/rest mouth art and speaker close-ups.
           Two separate, ordinary MP4 files are attached; **no ZIP required**.
           The offline Kokoro neural soundtrack is unchanged. The face-pose
@@ -88,7 +88,7 @@ jobs:
           else
             gh release create vegetable-adventure-v6-identity dist/* \
               --repo "${{ github.repository }}" \
-              --title 'Vegetable Adventure v6 — reference-calibrated lips and close-ups' \
+              --title 'Vegetable Adventure v6 — Max and Mia identity-locked lips' \
               --notes-file /tmp/release-v6.md
           fi
       - name: Show direct URLs
