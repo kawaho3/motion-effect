@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Vegetable Adventure v5: reference-calibrated mouth visemes and natural blinks.
+"""Vegetable Adventure v6: identity-locked talking and idle faces.
 
 Uses *existing* Kokoro audio/timeline produced by build.py --audio.  No eSpeak,
 no model/API at render time.  Faces and mouths are image-warped rather than
@@ -18,7 +18,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 from journey_backgrounds import STOPS, render_background
-from mouth_rig import mouth_variant
+from identity_lock import locked_mouth_variant
 
 HERE=Path(__file__).resolve().parent
 ASSETS=HERE/'assets'
@@ -170,7 +170,7 @@ class Actor:
         key=(pose,gaze,closed)
         if key not in self.cache:
             source=self.closed_base if closed else self.native
-            img=mouth_variant(source,self.face['mouth'],pose)
+            img=locked_mouth_variant(source,self.face['mouth'],pose)
             if not closed:img=_gaze_shift(img,self.face['eyes'],gaze)
             self.cache[key]=img.resize((self.width,self.height),Image.Resampling.LANCZOS)
         return self.cache[key]
@@ -292,8 +292,8 @@ def render_frame(t,timeline,controls,actors,backgrounds,cinematic=True):
                 run=i
         transition=(pose[who][max(0,frameidx-run-1)],min(1,(run+1)/2.)) if run<2 else None
         # When one actor speaks, the other occasionally looks toward them.
-        gazedir=(1 if who=='Max' else -1) if not line[who][frameidx] else 0
-        if int(t*1.1)%4==0:gazedir=0
+        # Never change an entire face or move pupils just because speech starts.
+        gazedir=0
         sprite=_actor_image(actor,p,gazedir,t,transition)
         # Distinct, gentle joke responses; bodies stay standing, feet stay grounded.
         jitter=0.0

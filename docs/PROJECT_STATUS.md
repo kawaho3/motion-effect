@@ -73,3 +73,10 @@ The 20-second Rose-in-the-Garden user video was visually inspected as a private 
 - [x] GitHub Actions full v5 video workflow passed; separate direct MP4 assets and mouth pose atlas published.
 - [x] Lightweight CI passed on run 43645953122 after OpenCV dependency fix.
 - [ ] Exact artistic matching remains a human quality gate; original reference source rig is unavailable.
+
+## Identity lock v6 (2026-11-15)
+- [x] Stable Max/Mia source images for all idle and talking visemes.
+- [x] Mouth-only masked edits, identical outside-face pixels and alpha; three new invariance tests pass.
+- [x] Remove dialogue-driven eye shifts; retain independent blinks.
+- [x] Local 5-second dialogue preview and two-character visual atlas generated.
+- [ ] Hosted full v6 run and artistic QA remain to be verified.

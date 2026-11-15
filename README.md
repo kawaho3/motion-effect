@@ -150,3 +150,12 @@ The old eSpeak-based demo was rejected for robotic voices and artificial facial 
 ## Verified v5 direct MP4 download
 
 [Vegetable Adventure v5 GitHub Release](https://github.com/kawaho3/motion-effect/releases/tag/vegetable-adventure-v5-lips) includes [HD MP4](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v5-lips/Vegetable_Adventure_v5_HD.mp4), [smaller MP4](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v5-lips/Vegetable_Adventure_v5_Smaller.mp4), [viseme atlas](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v5-lips/Vegetable_Adventure_v5_Visemes.jpg), reference-motion analysis and checksums. Hosted [video run 43645864012](https://github.com/kawaho3/motion-effect/actions/runs/43645864012) and [CI run 43645953122](https://github.com/kawaho3/motion-effect/actions/runs/43645953122) both succeeded. The input reference is not redistributed. Visual similarity requires human review.
+
+
+## v6: Max and Mia keep the same face when talking and silent
+
+The new [identity-lock compositor](episodes/vegetable_shop/identity_lock.py) restricts all lip changes to a small feathered mouth mask. **Every pixel outside that region (eyes, nose, cheeks, hair and face silhouette) stays identical to the original idle portrait**, for BOTH characters. The alpha channel stays identical. Automatic pupil shifts no longer depend on speaking state; independent blinking remains.
+
+[Developer TXT guide](docs/IDENTITY_LOCK_V6_GUIDE.txt) · [Pixel-regression tests](tests/test_identity_lock_v6.py) · [Visual QA report generator](episodes/vegetable_shop/identity_report.py) · [Manual v6 GitHub video Release workflow](.github/workflows/publish-identity-v6.yml)
+
+Run `python episodes/vegetable_shop/identity_report.py` to generate an idle/talking atlas and a JSON proof of zero changed pixels outside the lips for both Max and Mia. The two-minute Kokoro dialogue and 12 locations are retained. This fixes face stability, not every aspect of mouth-drawing realism.

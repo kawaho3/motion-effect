@@ -1,0 +1,68 @@
+MOTION EFFECT - IDENTITY LOCK V6 - MAX AND MIA
+===============================================
+Problem
+-------
+The user's two images demonstrate an unacceptable change in facial identity
+between the idle/silent and speaking states. In the earlier v5 code, mouth
+repainting was applied over a 97x65 face patch, and listening characters
+were given a different gaze based on whether they were speaking. At close
+range, the face could appear to change when dialogue starts or ends.
+
+Fix
+---
+Both characters use their EXACT same transparent original standing PNG
+for every viseme. All mouth art is composited through one small, stable,
+feathered mask centered at the original mouth. Pixels outside a bounded
+mouth box are byte-for-byte unchanged between idle and speaking, including
+hair, cheeks, eyebrows, eyes, nose, ears, shoulders, skin and shadow.
+The alpha/silhouette is restored from the source and never changed.
+
+v6 retains the existing v5 speech visemes: rest, M/B/P closed, soft,
+E, A, O/U and F/V. The Kokoro ONNX speech engine, voice names, timings,
+2-minute soundtrack, scene transitions and 12 locations remain intact.
+
+Identity differs from expression. Eyes may still blink on a short,
+independent schedule. A blink is NOT triggered by a dialogue turn. Voice-
+triggered automatic gaze shifts are removed so the character's eyes do not
+snap into a different drawing when they begin talking. Both characters
+use exactly the same identity-lock policy.
+
+Implementation
+--------------
+episodes/vegetable_shop/identity_lock.py - local mouth-only compositor
+episodes/vegetable_shop/mouth_rig.py - existing v5 art-generation engine
+episodes/vegetable_shop/journey.py - calls locked_mouth_variant rather
+                                    than painting large face regions
+episodes/vegetable_shop/identity_report.py - pixel-invariance checks + atlas
+tests/test_identity_lock_v6.py - reproducible two-character tests
+
+Developer commands
+------------------
+python -m pip install -r requirements-journey.txt
+python -m unittest discover -s tests -p 'test_identity_lock_v6.py' -v
+python episodes/vegetable_shop/identity_report.py
+python episodes/vegetable_shop/journey.py --preview-seconds 5
+
+The full 120s render requires the already prepared Kokoro 48-kHz stereo
+WAV, phoneme timeline and subtitles inside episodes/vegetable_shop/output.
+See docs/SOUND_GUIDE_KOKORO.txt; no paid TTS service is necessary.
+
+Quality gates
+-------------
+1. Same original source image dimensions and alpha for all seven poses.
+2. Exactly ZERO changed pixels outside mouth rectangle for both characters.
+3. The eye and cheek pixels are identical between idle and speech poses.
+4. Returning to idle restores the original face byte-for-byte.
+5. A distinct speech mouth appears on both characters.
+6. No forced eye or head swap at a speech start.
+7. Keep the visual comparison a human review step. Passing pixel tests
+   cannot certify that a painted mouth looks as natural as the reference.
+
+Important limitation
+--------------------
+This fixes inconsistency of the *identity* between idle and speaking, NOT
+all realism issues. The current hand-painted procedural mouth shapes are
+still not a professional facial rig. The next quality step is to replace
+v5 procedural visemes with small, artist-aligned mouth patches generated
+against these same original Max and Mia faces, never a separately generated
+portrait. Preserve this mask and the invariance tests in that upgrade.
