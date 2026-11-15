@@ -80,3 +80,12 @@ The 20-second Rose-in-the-Garden user video was visually inspected as a private 
 - [x] Remove dialogue-driven eye shifts; retain independent blinks.
 - [x] Local 5-second dialogue preview and two-character visual atlas generated.
 - [ ] Hosted full v6 run and artistic QA remain to be verified.
+
+## Verified v6 hosted render and direct release (2026-11-15)
+
+- [x] GitHub Actions render [43742756838](https://github.com/kawaho3/motion-effect/actions/runs/43742756838): successful.
+- [x] Pixel QA: `identity_verified=true`, 14 original-source portrait/pose comparisons; original alpha unchanged; all non-mouth pixels identical.
+- [x] Video QA: 120.0 seconds, 3600 frames, 30 fps, 1280x720, 12 scene changes; Kokoro voices unchanged.
+- [x] [Direct-download GitHub Release](https://github.com/kawaho3/motion-effect/releases/tag/vegetable-adventure-v6-identity): HD MP4, smaller MP4, atlas, pixel QA JSON and developer guide; no ZIP needed.
+- [x] GitHub lightweight CI [43742732397](https://github.com/kawaho3/motion-effect/actions/runs/43742732397): successful.
+- [ ] Human approval still needed for artistic realism of the mouth, eye and scene animation. Identity consistency and reference-style animation quality are different acceptance checks.

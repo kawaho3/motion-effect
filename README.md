@@ -159,3 +159,10 @@ The new [identity-lock compositor](episodes/vegetable_shop/identity_lock.py) res
 [Developer TXT guide](docs/IDENTITY_LOCK_V6_GUIDE.txt) · [Pixel-regression tests](tests/test_identity_lock_v6.py) · [Visual QA report generator](episodes/vegetable_shop/identity_report.py) · [Manual v6 GitHub video Release workflow](.github/workflows/publish-identity-v6.yml)
 
 Run `python episodes/vegetable_shop/identity_report.py` to generate an idle/talking atlas and a JSON proof of zero changed pixels outside the lips for both Max and Mia. The two-minute Kokoro dialogue and 12 locations are retained. This fixes face stability, not every aspect of mouth-drawing realism.
+
+## Verified v6 full video — facial identity lock
+
+The [Vegetable Adventure v6 GitHub Release](https://github.com/kawaho3/motion-effect/releases/tag/vegetable-adventure-v6-identity) has been published. Download the [standalone smaller MP4](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v6-identity/Vegetable_Adventure_v6_Smaller.mp4) (~7.5 MB) or [HD MP4](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v6-identity/Vegetable_Adventure_v6_HD.mp4) (~39.6 MB), with no ZIP. The Release includes a [side-by-side Max and Mia idle/talking atlas](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v6-identity/Vegetable_Adventure_v6_Identity_Atlas.jpg) and [machine-readable identity check](https://github.com/kawaho3/motion-effect/releases/download/vegetable-adventure-v6-identity/Identity_Lock_QA.json).
+
+[GitHub Actions full-video run 43742756838](https://github.com/kawaho3/motion-effect/actions/runs/43742756838) and [unit-test CI run 43742732397](https://github.com/kawaho3/motion-effect/actions/runs/43742732397) succeeded. The hosted render verified 120 seconds / 3600 frames / 30fps / 1280×720 / 12 settings, with zero non-mouth pixel changes across all poses of both original characters. This verifies stable face identity, not artistic perfection of the mouth artwork.
+
